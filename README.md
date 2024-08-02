@@ -9,7 +9,7 @@ This is a full-stack web application. Topic and scope to be determined soon...
 ## Group Name
 Java can't See Sharp
 
-## Group Members 
+## Group Members & Collaborators
 * Zainaaz Hansa - @zainaaazz
 * Shane Ndobela - @ShaneWeb-dev
 * Thando Gumbi - @Thando1221
