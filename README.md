@@ -13,5 +13,6 @@ Java can't See Sharp
 * Zainaaz Hansa - @zainaaazz
 * Shane Ndobela - @ShaneWeb-dev
 * Thando Gumbi - @Thando1221
+* Simphiwe Nhlapo - @SimphiweNhlapo
 
 
