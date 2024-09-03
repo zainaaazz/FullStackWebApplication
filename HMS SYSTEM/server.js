@@ -1,22 +1,16 @@
 const express = require('express');
-const cors = require('cors');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger/swagger.json');
-const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-require('dotenv').config();
+const { swaggerUi, swaggerDocs } = require('./swaggerConfig');
 
 const app = express();
-const port = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(express.json());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
+// Other middleware and route setups...
 
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}, http://localhost:3000/api-docs/`);
+// Swagger setup
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log(`API documentation available at http://localhost:${PORT}/api-docs`);
 });
-
-

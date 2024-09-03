@@ -38,4 +38,10 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { register, login };
+// New logout function
+const logout = (req, res) => {
+    // Placeholder logout logic, typically handled on the client side
+    res.status(200).json({ message: 'User logged out' });
+};
+
+module.exports = { register, login, logout };
