@@ -28,17 +28,46 @@ module.exports = router;
  *         username:
  *           type: string
  *           description: The user's username
+ *         passwordHash:
+ *           type: string
+ *           description: The user's hashed password
+ *         firstName:
+ *           type: string
+ *           description: The user's first name
+ *         lastName:
+ *           type: string
+ *           description: The user's last name
+ *         email:
+ *           type: string
+ *           description: The user's email address
  *         userRole:
  *           type: string
- *           description: The user's role
+ *           description: The user's role (e.g., admin, student)
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: The date the user was created
+ *         lastPasswordUpdateAt:
+ *           type: string
+ *           format: date-time
+ *           description: The date the password was last updated
+ *         isPasswordReset:
+ *           type: boolean
+ *           description: Whether the password needs to be reset
  */
 
 /**
  * @swagger
- * /api/users:
+ * /users:
  *   post:
  *     summary: Register a new user
  *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -58,7 +87,7 @@ module.exports = router;
  *                 $ref: '#/components/schemas/User'
  *       500:
  *         description: Error retrieving users
- * /api/users/{id}:
+ * /users/{id}:
  *   get:
  *     summary: Get details of a specific user
  *     tags: [Users]
@@ -90,6 +119,12 @@ module.exports = router;
  *           type: integer
  *         required: true
  *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
  *         description: User updated successfully
