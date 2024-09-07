@@ -3,13 +3,14 @@ const dbConfig = require('../config/dbConfig'); // Assuming dbConfig is stored s
 
 // Function to create a new course
 const createCourse = async (req, res) => {
-    const { courseName, courseDescription } = req.body;
+    const { courseCode, courseName, duration } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
+            .input('CourseCode', sql.NVarChar, courseCode)
             .input('CourseName', sql.NVarChar, courseName)
-            .input('CourseDescription', sql.NVarChar, courseDescription)
-            .query('INSERT INTO dbo.tblCourse (CourseName, CourseDescription) VALUES (@CourseName, @CourseDescription)');
+            .input('Duration', sql.Int, duration)
+            .query('INSERT INTO dbo.tblCourse (CourseCode, CourseName, Duration) VALUES (@CourseCode, @CourseName, @Duration)');
         res.status(201).json({ message: 'Course created successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error creating course: ' + err.message });
@@ -49,14 +50,15 @@ const getCourseById = async (req, res) => {
 // Function to update course information
 const updateCourse = async (req, res) => {
     const { id } = req.params;
-    const { courseName, courseDescription } = req.body;
+    const { courseCode, courseName, duration } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
             .input('CourseID', sql.Int, id)
+            .input('CourseCode', sql.NVarChar, courseCode)
             .input('CourseName', sql.NVarChar, courseName)
-            .input('CourseDescription', sql.NVarChar, courseDescription)
-            .query('UPDATE dbo.tblCourse SET CourseName = @CourseName, CourseDescription = @CourseDescription WHERE CourseID = @CourseID');
+            .input('Duration', sql.Int, duration)
+            .query('UPDATE dbo.tblCourse SET CourseCode = @CourseCode, CourseName = @CourseName, Duration = @Duration WHERE CourseID = @CourseID');
         res.status(200).json({ message: 'Course updated successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error updating course: ' + err.message });

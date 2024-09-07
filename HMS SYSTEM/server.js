@@ -1,7 +1,7 @@
 const express = require('express');
 const { swaggerUi, swaggerDocs } = require('./swaggerConfig');
 const userRoutes = require('./routes/userRoutes');
-const courseRoutes = require('./routes/courseRoutes');
+const courseRoutes = require('./routes/courseRoutes');  // Ensure courseRoutes is registered
 const moduleRoutes = require('./routes/moduleRoutes');
 const assignmentRoutes = require('./routes/assignmentRoutes');
 const videoRoutes = require('./routes/videoRoutes');
@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Register routes
 app.use('/users', userRoutes);
-app.use('/courses', courseRoutes);
+app.use('/courses', courseRoutes);  // Register the /courses route
 app.use('/modules', moduleRoutes);
 app.use('/assignments', assignmentRoutes);
 app.use('/videos', videoRoutes);
