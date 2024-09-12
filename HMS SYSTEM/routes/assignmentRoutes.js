@@ -13,8 +13,6 @@ router.delete('/:id', authenticateJWT, deleteAssignment); // Delete an assignmen
 
 module.exports = router;
 
-
-
 /**
  * @swagger
  * components:
@@ -22,30 +20,95 @@ module.exports = router;
  *     Assignment:
  *       type: object
  *       properties:
- *         id:
- *           type: integer
- *           description: The assignment ID
- *         assignmentTitle:
+ *         title:
  *           type: string
  *           description: The title of the assignment
- *         assignmentDescription:
+ *         instructions:
  *           type: string
- *           description: The description of the assignment
+ *           description: Instructions for the assignment
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: The date and time when the assignment was created
  *         dueDate:
  *           type: string
  *           format: date-time
  *           description: The due date of the assignment
- */
+ *         ModuleID:
+ *           type: integer
+ *           description: The ID of the module course
+ *       required:
+ *         - title
+ *         - dueDate
+ *         - ModuleID
+ *   requestBodies:
+ *     AssignmentRequestBody:
+ *       description: The body of the request for creating or updating an assignment
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the assignment
+ *               instructions:
+ *                 type: string
+ *                 description: Instructions for the assignment
+ *               dueDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: The due date of the assignment
+ *               ModuleID:
+ *                 type: integer
+ *                 description: The ID of the module course
+ *             required:
+ *               - title
+ *               - dueDate
+ *               - ModuleID
+ *   responses:
+ *     AssignmentCreated:
+ *       description: Assignment created successfully
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *     AssignmentUpdated:
+ *       description: Assignment updated successfully
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *     AssignmentDeleted:
+ *       description: Assignment deleted successfully
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ * */
 
 /**
  * @swagger
- * /api/assignments:
+ * /assignments:
  *   post:
  *     summary: Create a new assignment
  *     tags: [Assignments]
+ *     requestBody:
+ *       $ref: '#/components/requestBodies/AssignmentRequestBody'
  *     responses:
  *       201:
- *         description: Assignment created successfully
+ *         $ref: '#/components/responses/AssignmentCreated'
+ *       400:
+ *         description: Bad request, invalid data
  *       500:
  *         description: Error creating assignment
  *   get:
@@ -62,7 +125,7 @@ module.exports = router;
  *                 $ref: '#/components/schemas/Assignment'
  *       500:
  *         description: Error retrieving assignments
- * /api/assignments/{id}:
+ * /assignments/{id}:
  *   get:
  *     summary: Get details of a specific assignment
  *     tags: [Assignments]
@@ -94,9 +157,13 @@ module.exports = router;
  *           type: integer
  *         required: true
  *         description: The assignment ID
+ *     requestBody:
+ *       $ref: '#/components/requestBodies/AssignmentRequestBody'
  *     responses:
  *       200:
- *         description: Assignment updated successfully
+ *         $ref: '#/components/responses/AssignmentUpdated'
+ *       400:
+ *         description: Bad request, invalid data
  *       500:
  *         description: Error updating assignment
  *   delete:
@@ -111,7 +178,7 @@ module.exports = router;
  *         description: The assignment ID
  *     responses:
  *       200:
- *         description: Assignment deleted successfully
+ *         $ref: '#/components/responses/AssignmentDeleted'
  *       500:
  *         description: Error deleting assignment
- */
+ * */

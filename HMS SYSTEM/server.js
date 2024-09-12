@@ -8,6 +8,7 @@ const videoRoutes = require('./routes/videoRoutes');
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const submissionRoutes = require('./routes/submissionRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/videos', videoRoutes);
 app.use('/enrollments', enrollmentRoutes);
 app.use('/feedbacks', feedbackRoutes);
 app.use('/submissions', submissionRoutes);
+app.use('/auth', authRoutes);
 
 // Swagger setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

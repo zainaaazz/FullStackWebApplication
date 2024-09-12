@@ -3,14 +3,15 @@ const dbConfig = require('../config/dbConfig'); // Assuming dbConfig is stored s
 
 // Function to create a new assignment
 const createAssignment = async (req, res) => {
-    const { assignmentTitle, assignmentDescription, dueDate } = req.body;
+    const { title, instructions, dueDate, ModuleID } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('AssignmentTitle', sql.NVarChar, assignmentTitle)
-            .input('AssignmentDescription', sql.NVarChar, assignmentDescription)
+            .input('Title', sql.NVarChar, title)
+            .input('Instructions', sql.NVarChar, instructions)
             .input('DueDate', sql.DateTime, dueDate)
-            .query('INSERT INTO dbo.tblAssignment (AssignmentTitle, AssignmentDescription, DueDate) VALUES (@AssignmentTitle, @AssignmentDescription, @DueDate)');
+            .input('ModuleID', sql.Int, ModuleID)
+            .query('INSERT INTO dbo.tblAssignment (Title, Instructions, DueDate, ModuleID) VALUES (@Title, @Instructions, @DueDate, @ModuleID)');
         res.status(201).json({ message: 'Assignment created successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error creating assignment: ' + err.message });
@@ -21,7 +22,7 @@ const createAssignment = async (req, res) => {
 const getAllAssignments = async (req, res) => {
     try {
         const pool = await sql.connect(dbConfig);
-        const result = await pool.request().query('SELECT * FROM dbo.tblAssignment');
+        const result = await pool.request().query('SELECT AssignmentID, Title, Instructions, CreatedAt, DueDate, ModuleID FROM dbo.tblAssignment');
         res.json(result.recordset);
     } catch (err) {
         res.status(500).json({ error: 'Error retrieving assignments: ' + err.message });
@@ -35,7 +36,7 @@ const getAssignmentById = async (req, res) => {
         const pool = await sql.connect(dbConfig);
         const result = await pool.request()
             .input('AssignmentID', sql.Int, id)
-            .query('SELECT * FROM dbo.tblAssignment WHERE AssignmentID = @AssignmentID');
+            .query('SELECT AssignmentID, Title, Instructions, CreatedAt, DueDate, ModuleID FROM dbo.tblAssignment WHERE AssignmentID = @AssignmentID');
         const assignment = result.recordset[0];
         if (assignment) {
             res.json(assignment);
@@ -50,15 +51,16 @@ const getAssignmentById = async (req, res) => {
 // Function to update assignment information
 const updateAssignment = async (req, res) => {
     const { id } = req.params;
-    const { assignmentTitle, assignmentDescription, dueDate } = req.body;
+    const { ModuleID, title, instructions, dueDate } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
             .input('AssignmentID', sql.Int, id)
-            .input('AssignmentTitle', sql.NVarChar, assignmentTitle)
-            .input('AssignmentDescription', sql.NVarChar, assignmentDescription)
+            .input('ModuleID', sql.Int, ModuleID) // Note: using ModuleID as per the schema
+            .input('Title', sql.NVarChar, title)
+            .input('Instructions', sql.NVarChar, instructions)
             .input('DueDate', sql.DateTime, dueDate)
-            .query('UPDATE dbo.tblAssignment SET AssignmentTitle = @AssignmentTitle, AssignmentDescription = @AssignmentDescription, DueDate = @DueDate WHERE AssignmentID = @AssignmentID');
+            .query('UPDATE dbo.tblAssignment SET Title = @Title, Instructions = @Instructions, DueDate = @DueDate, ModuleID = @ModuleID WHERE AssignmentID = @AssignmentID');
         res.status(200).json({ message: 'Assignment updated successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error updating assignment: ' + err.message });

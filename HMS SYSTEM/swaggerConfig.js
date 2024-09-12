@@ -5,17 +5,14 @@ const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
         info: {
-            title: 'HMS System API',
+            title: 'API Documentation',
             version: '1.0.0',
-            description: 'API documentation for the HMS System',
-            contact: {
-                name: 'Your Name',
-                email: 'your.email@example.com',
-            },
+            description: 'Your API description here',
         },
         servers: [
             {
                 url: 'http://localhost:3000',
+                description: 'Local server',
             },
         ],
         components: {
@@ -24,18 +21,22 @@ const swaggerOptions = {
                     type: 'http',
                     scheme: 'bearer',
                     bearerFormat: 'JWT',
+                    description: 'Enter in format Bearer <token>',
                 },
             },
         },
         security: [
             {
-                bearerAuth: [],
+                bearerAuth: [], // Apply Bearer Auth to all routes by default
             },
         ],
     },
-    apis: ['./routes/*.js'], // Path to your API route files
+    apis: ['./routes/*.js'], // Adjust this to your routes
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-module.exports = { swaggerUi, swaggerDocs };
+module.exports = {
+    swaggerUi,
+    swaggerDocs,
+};
