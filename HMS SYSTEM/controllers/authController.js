@@ -4,15 +4,19 @@ const sql = require('mssql');
 const dbConfig = require('../config/dbConfig');
 
 const register = async (req, res) => {
-    const { Username, Password, UserRole } = req.body;
+    const { Username, Password, FirstName, LastName, Email, UserRole,CourseID } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         const hashedPassword = await bcrypt.hash(Password, 10);
         await pool.request()
             .input('Username', sql.NVarChar, Username)
             .input('PasswordHash', sql.NVarChar, hashedPassword)
+            .input('FirstName', sql.NVarChar, FirstName)
+            .input('LastName', sql.NVarChar, LastName)
+            .input('Email', sql.NVarChar, Email)
             .input('UserRole', sql.NVarChar, UserRole)
-            .query('INSERT INTO dbo.tblUser (Username, PasswordHash, UserRole) VALUES (@Username, @PasswordHash, @UserRole)');
+            .input('CourseID', sql.INT, CourseID)
+            .query('INSERT INTO dbo.tblUser (Username, PasswordHash, FirstName, LastName, Email, UserRole,CourseID) VALUES (@Username, @PasswordHash, @FirstName, @LastName, @Email, @UserRole,@CourseID)');
         res.status(201).json({ message: 'User registered' });
     } catch (err) {
         res.status(500).json({ error: 'Error registering user: ' + err.message });

@@ -46,7 +46,11 @@ router.post('/logout', logout); // New logout endpoint
  *                 example: johndoe@example.com
  *               UserRole:
  *                 type: string
- *                 example: user
+ *                 example: lecture/student
+ *               CourseID:
+ *                 type: INT
+ *                 example: 1
+
  *     responses:
  *       201:
  *         description: User successfully registered
