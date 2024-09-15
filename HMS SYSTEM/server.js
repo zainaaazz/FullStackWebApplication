@@ -4,7 +4,7 @@ const userRoutes = require('./routes/userRoutes');
 const courseRoutes = require('./routes/courseRoutes');  // Ensure courseRoutes is registered
 const moduleRoutes = require('./routes/moduleRoutes');
 const assignmentRoutes = require('./routes/assignmentRoutes');
-const videoRoutes = require('./routes/videoRoutes');
+const videoRoutes = require('./routes/videoRoutes');  // Video routes
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const submissionRoutes = require('./routes/submissionRoutes');
@@ -20,7 +20,7 @@ app.use('/users', userRoutes);
 app.use('/courses', courseRoutes);  // Register the /courses route
 app.use('/modules', moduleRoutes);
 app.use('/assignments', assignmentRoutes);
-app.use('/videos', videoRoutes);
+app.use('/videos', videoRoutes);  // Register /videos route
 app.use('/enrollments', enrollmentRoutes);
 app.use('/feedbacks', feedbackRoutes);
 app.use('/submissions', submissionRoutes);
