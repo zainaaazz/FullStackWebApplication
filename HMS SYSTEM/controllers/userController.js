@@ -1,7 +1,6 @@
 const sql = require('mssql');
 const dbConfig = require('../config/dbConfig');
-
-// Helper function to check if the user is an admin
+//function to check if the user is an admin
 const isAdmin = (req) => req.user && req.user.UserRole === 'Admin';
 
 const getAllUsers = async (req, res) => {

@@ -31,7 +31,7 @@ router.post('/logout', logout); // New logout endpoint
  *             properties:
  *               Username:
  *                 type: string
- *                 example: johndoe
+ *                 example: 563758
  *               Password:
  *                 type: string
  *                 example: securepassword123
@@ -46,7 +46,7 @@ router.post('/logout', logout); // New logout endpoint
  *                 example: johndoe@example.com
  *               UserRole:
  *                 type: string
- *                 example: lecture/student
+ *                 example: Lecture
  *               CourseID:
  *                 type: INT
  *                 example: 1

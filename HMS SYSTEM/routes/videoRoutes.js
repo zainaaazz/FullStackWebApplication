@@ -1,17 +1,11 @@
 const express = require('express');
 const authenticateJWT = require('../middlewares/authenticateJWT');
 const { uploadVideo, getAllVideos, getVideoById, deleteVideo } = require('../controllers/videoController');
+const multer = require('multer');
+const storage = multer.memoryStorage(); // Use memory storage for multer
+const upload = multer({ storage: storage });
 
 const router = express.Router();
-
-// Video Operations
-router.post('/', authenticateJWT, uploadVideo); // Upload a video (Student only)
-router.get('/', authenticateJWT, getAllVideos); // Retrieve all videos (Admin and Lecturer only)
-router.get('/:id', authenticateJWT, getVideoById); // Get details of a specific video (Admin and Lecturer only)
-router.delete('/:id', authenticateJWT, deleteVideo); // Delete a video (Admin only)
-
-module.exports = router;
-
 
 /**
  * @swagger
@@ -20,30 +14,58 @@ module.exports = router;
  *     Video:
  *       type: object
  *       properties:
- *         id:
+ *         VideoID:
  *           type: integer
  *           description: The video ID
- *         videoTitle:
+ *         VideoTitle:
  *           type: string
  *           description: The title of the video
- *         videoUrl:
+ *         VideoURL:
  *           type: string
- *           description: The URL of the video
+ *           description: The URL of the video in Azure Blob Storage
+ *       example:
+ *         VideoID: 1
+ *         VideoTitle: "Introduction to AI"
+ *         VideoURL: "https://hmsvideostorage.blob.core.windows.net/videos/intro_to_ai.mp4"
  */
 
 /**
  * @swagger
- * /api/videos:
+ * /videos:
  *   post:
  *     summary: Upload a video
  *     tags: [Videos]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: The video file to upload
+ *               videoTitle:
+ *                 type: string
+ *                 description: The title of the video
  *     responses:
  *       201:
  *         description: Video uploaded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Video'
  *       500:
- *         description: Error uploading video
+ *         description: Server error
+ */
+router.post('/', authenticateJWT, upload.single('file'), uploadVideo);
+
+/**
+ * @swagger
+ * /videos:
  *   get:
- *     summary: Retrieve a list of all videos
+ *     summary: Retrieve all videos
  *     tags: [Videos]
  *     responses:
  *       200:
@@ -55,21 +77,26 @@ module.exports = router;
  *               items:
  *                 $ref: '#/components/schemas/Video'
  *       500:
- *         description: Error retrieving videos
- * /api/videos/{id}:
+ *         description: Server error
+ */
+router.get('/', authenticateJWT, getAllVideos);
+
+/**
+ * @swagger
+ * /videos/{id}:
  *   get:
  *     summary: Get details of a specific video
  *     tags: [Videos]
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: integer
- *         required: true
- *         description: The video ID
+ *         description: The ID of the video to retrieve
  *     responses:
  *       200:
- *         description: Video details
+ *         description: Video retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -77,20 +104,31 @@ module.exports = router;
  *       404:
  *         description: Video not found
  *       500:
- *         description: Error retrieving video
+ *         description: Server error
+ */
+router.get('/:id', authenticateJWT, getVideoById);
+
+/**
+ * @swagger
+ * /videos/{id}:
  *   delete:
  *     summary: Delete a video
  *     tags: [Videos]
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: integer
- *         required: true
- *         description: The video ID
+ *         description: The ID of the video to delete
  *     responses:
  *       200:
  *         description: Video deleted successfully
+ *       404:
+ *         description: Video not found
  *       500:
- *         description: Error deleting video
+ *         description: Server error
  */
+router.delete('/:id', authenticateJWT, deleteVideo);
+
+module.exports = router;
