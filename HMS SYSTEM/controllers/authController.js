@@ -4,15 +4,32 @@ const sql = require('mssql');
 const dbConfig = require('../config/dbConfig');
 
 const register = async (req, res) => {
-    const { Username, Password, UserRole } = req.body;
+    const { UserNumber, Password, FirstName, LastName, Email, CourseID } = req.body;
+
+    // Determine UserRole based on UserNumber (modify logic if necessary)
+    let UserRole;
+    if (UserNumber.startsWith('1') || UserNumber.startsWith('2')) {
+        UserRole = 'Lecture';
+    } else if (UserNumber.startsWith('3') || UserNumber.startsWith('4')) {
+        UserRole = 'Student';
+    } else if (UserNumber.startsWith('5') || UserNumber.startsWith('6')) {
+        UserRole = 'Admin';
+    } else {
+        return res.status(400).json({ error: 'Invalid UserNumber' });
+    }
+
     try {
         const pool = await sql.connect(dbConfig);
         const hashedPassword = await bcrypt.hash(Password, 10);
         await pool.request()
-            .input('Username', sql.NVarChar, Username)
+            .input('UserNumber', sql.Int, UserNumber)
             .input('PasswordHash', sql.NVarChar, hashedPassword)
+            .input('FirstName', sql.NVarChar, FirstName)
+            .input('LastName', sql.NVarChar, LastName)
+            .input('Email', sql.NVarChar, Email)
             .input('UserRole', sql.NVarChar, UserRole)
-            .query('INSERT INTO dbo.tblUser (Username, PasswordHash, UserRole) VALUES (@Username, @PasswordHash, @UserRole)');
+            .input('CourseID', sql.INT, CourseID)
+            .query('INSERT INTO dbo.tblUser (UserNumber, PasswordHash, FirstName, LastName, Email, UserRole, CourseID) VALUES (@UserNumber, @PasswordHash, @FirstName, @LastName, @Email, @UserRole, @CourseID)');
         res.status(201).json({ message: 'User registered' });
     } catch (err) {
         res.status(500).json({ error: 'Error registering user: ' + err.message });
@@ -20,15 +37,15 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    const { Username, Password } = req.body;
+    const { UserNumber, Password } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         const result = await pool.request()
-            .input('Username', sql.NVarChar, Username)
-            .query('SELECT * FROM dbo.tblUser WHERE Username = @Username');
+            .input('UserNumber', sql.Int, UserNumber)
+            .query('SELECT * FROM dbo.tblUser WHERE UserNumber = @UserNumber');
         const user = result.recordset[0];
         if (user && await bcrypt.compare(Password, user.PasswordHash)) {
-            const accessToken = jwt.sign({ Username: user.Username, UserRole: user.UserRole }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const accessToken = jwt.sign({ UserNumber: user.UserNumber, UserRole: user.UserRole }, process.env.JWT_SECRET, { expiresIn: '1h' });
             res.json({ accessToken });
         } else {
             res.status(401).json({ error: 'Invalid credentials' });
