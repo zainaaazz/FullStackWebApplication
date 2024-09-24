@@ -9,7 +9,7 @@ const enrollStudent = async (req, res) => {
         await pool.request()
             .input('StudentID', sql.Int, studentId)
             .input('ModuleID', sql.Int, moduleId)
-            .query('INSERT INTO dbo.tblEnrollment (StudentID, ModuleID) VALUES (@StudentID, @ModuleID)');
+            .query('INSERT INTO tblStudentModuleEnrollment (StudentID, ModuleID) VALUES (@StudentID, @ModuleID)');
         res.status(201).json({ message: 'Student enrolled successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error enrolling student: ' + err.message });
@@ -20,7 +20,7 @@ const enrollStudent = async (req, res) => {
 const getAllEnrollments = async (req, res) => {
     try {
         const pool = await sql.connect(dbConfig);
-        const result = await pool.request().query('SELECT * FROM dbo.tblEnrollment');
+        const result = await pool.request().query('SELECT * FROM tblStudentModuleEnrollment');
         res.json(result.recordset);
     } catch (err) {
         res.status(500).json({ error: 'Error retrieving enrollments: ' + err.message });
@@ -34,7 +34,7 @@ const removeEnrollment = async (req, res) => {
         const pool = await sql.connect(dbConfig);
         await pool.request()
             .input('EnrollmentID', sql.Int, id)
-            .query('DELETE FROM dbo.tblEnrollment WHERE EnrollmentID = @EnrollmentID');
+            .query('DELETE FROM tblStudentModuleEnrollment WHERE EnrollmentID = @EnrollmentID');
         res.status(200).json({ message: 'Enrollment removed successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error removing enrollment: ' + err.message });
