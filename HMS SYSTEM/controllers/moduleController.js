@@ -1,15 +1,17 @@
 const sql = require('mssql');
-const dbConfig = require('../config/dbConfig'); // Assuming dbConfig is stored separately
+const dbConfig = require('../config/dbConfig');
 
 // Function to create a new module
 const createModule = async (req, res) => {
-    const { moduleName, moduleDescription } = req.body;
+    const { moduleCode, moduleName, moduleDescription, lecturerId } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
+            .input('ModuleCode', sql.VarChar, moduleCode)
             .input('ModuleName', sql.NVarChar, moduleName)
             .input('ModuleDescription', sql.NVarChar, moduleDescription)
-            .query('INSERT INTO dbo.tblModule (ModuleName, ModuleDescription) VALUES (@ModuleName, @ModuleDescription)');
+            .input('Lecturer', sql.Int, lecturerId) // Ensure you pass lecturer ID
+            .query('INSERT INTO dbo.tblModule (ModuleCode, ModuleName, Description, Lecturer) VALUES (@ModuleCode, @ModuleName, @ModuleDescription, @Lecturer)');
         res.status(201).json({ message: 'Module created successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error creating module: ' + err.message });
@@ -49,14 +51,16 @@ const getModuleById = async (req, res) => {
 // Function to update module information
 const updateModule = async (req, res) => {
     const { id } = req.params;
-    const { moduleName, moduleDescription } = req.body;
+    const { moduleCode, moduleName, moduleDescription, lecturerId } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
             .input('ModuleID', sql.Int, id)
+            .input('ModuleCode', sql.VarChar, moduleCode)
             .input('ModuleName', sql.NVarChar, moduleName)
             .input('ModuleDescription', sql.NVarChar, moduleDescription)
-            .query('UPDATE dbo.tblModule SET ModuleName = @ModuleName, ModuleDescription = @ModuleDescription WHERE ModuleID = @ModuleID');
+            .input('Lecturer', sql.Int, lecturerId)
+            .query('UPDATE dbo.tblModule SET ModuleCode = @ModuleCode, ModuleName = @ModuleName, Description = @ModuleDescription, Lecturer = @Lecturer WHERE ModuleID = @ModuleID');
         res.status(200).json({ message: 'Module updated successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error updating module: ' + err.message });
