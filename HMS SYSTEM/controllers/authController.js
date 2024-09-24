@@ -16,7 +16,6 @@ const register = async (req, res) => {
             .input('Email', sql.NVarChar, Email)
             .input('UserRole', sql.NVarChar, UserRole)
             .input('CourseID', sql.INT, CourseID)
-            .input('UserRole', sql.NVarChar, UserRole)
             .query('INSERT INTO dbo.tblUser (UserNumber, PasswordHash, FirstName, LastName, Email, UserRole, CourseID) VALUES (@UserNumber, @PasswordHash, @FirstName, @LastName, @Email, @UserRole, @CourseID)');
         res.status(201).json({ message: 'User registered' });
     } catch (err) {
