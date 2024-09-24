@@ -1,18 +1,18 @@
 const express = require('express');
 const authenticateJWT = require('../middlewares/authenticateJWT');
-const { createAssignment, getAllAssignments, getAssignmentById, updateAssignment, deleteAssignment } = require('../controllers/assignmentController');
+const { createAssignment, getAllAssignments, getAllAssignment_ModuleById, getAssignmentById, updateAssignment, deleteAssignment } = require('../controllers/assignmentController');
 
 const router = express.Router();
 
 // Assignment CRUD Operations
 router.post('/', authenticateJWT(['Admin', 'Lecture']), createAssignment); // Create a new assignment (Admin or Lecturer)
-router.get('/', authenticateJWT(['Admin','Lecture','Student']), getAllAssignments); // Retrieve all assignments
-router.get('/:id', authenticateJWT(['Admin', 'Lecture','Student']), getAssignmentById); // Get details of a specific assignment
+router.get('/', authenticateJWT(['Admin', 'Lecture', 'Student']), getAllAssignments); // Retrieve all assignments
+router.get('/module/:ModuleID', authenticateJWT(['Admin', 'Lecture', 'Student']), getAllAssignment_ModuleById); // Get all assignments for a specific module
+router.get('/:id', authenticateJWT(['Admin', 'Lecture', 'Student']), getAssignmentById); // Get details of a specific assignment
 router.put('/:id', authenticateJWT(['Admin', 'Lecture']), updateAssignment); // Update assignment information (Admin or Lecturer)
 router.delete('/:id', authenticateJWT(['Admin', 'Lecture']), deleteAssignment); // Delete an assignment (Admin or Lecturer)
 
 module.exports = router;
-
 
 /**
  * @swagger
@@ -126,6 +126,32 @@ module.exports = router;
  *                 $ref: '#/components/schemas/Assignment'
  *       500:
  *         description: Error retrieving assignments
+ * 
+ * /assignments/module/{ModuleID}:
+ *   get:
+ *     summary: Get all assignments for a specific module
+ *     tags: [Assignments]
+ *     parameters:
+ *       - in: path
+ *          name : ModuleID
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The module ID
+ *     responses:
+ *       200:
+ *         description: A list of assignments for a specific module
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Assignment'
+ *       404:
+ *         description: No assignments found for the given module
+ *       500:
+ *         description: Error retrieving assignments
+ * 
  * /assignments/{id}:
  *   get:
  *     summary: Get details of a specific assignment
@@ -182,4 +208,4 @@ module.exports = router;
  *         $ref: '#/components/responses/AssignmentDeleted'
  *       500:
  *         description: Error deleting assignment
- * */
+ */
