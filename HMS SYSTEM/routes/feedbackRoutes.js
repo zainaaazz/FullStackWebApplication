@@ -1,6 +1,6 @@
 const express = require('express');
 const authenticateJWT = require('../middlewares/authenticateJWT');
-const { provideFeedback, getAllFeedback, getFeedbackById } = require('../controllers/feedbackController');
+const { provideFeedback, getAllFeedback, getFeedbackById, updateFeedback, deleteFeedback } = require('../controllers/feedbackController');
 
 const router = express.Router();
 
@@ -8,9 +8,10 @@ const router = express.Router();
 router.post('/', authenticateJWT, provideFeedback); // Provide feedback on a submission (Lecturer only)
 router.get('/', authenticateJWT, getAllFeedback); // Retrieve all feedback (Admin, Lecturer, and Student)
 router.get('/:id', authenticateJWT, getFeedbackById); // Get details of specific feedback (Admin, Lecturer, and Student)
+router.put('/:id', authenticateJWT, updateFeedback); // Update specific feedback (Lecturer only)
+router.delete('/:id', authenticateJWT, deleteFeedback); // Delete specific feedback (Admin only)
 
 module.exports = router;
-
 
 /**
  * @swagger
@@ -39,6 +40,19 @@ module.exports = router;
  *   post:
  *     summary: Provide feedback on a submission
  *     tags: [Feedback]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               submissionId:
+ *                 type: integer
+ *                 description: ID of the submission
+ *               feedbackText:
+ *                 type: string
+ *                 description: The feedback text
  *     responses:
  *       201:
  *         description: Feedback provided successfully
@@ -80,4 +94,48 @@ module.exports = router;
  *         description: Feedback not found
  *       500:
  *         description: Error retrieving feedback
+ *   put:
+ *     summary: Update specific feedback
+ *     tags: [Feedback]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The feedback ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               feedbackText:
+ *                 type: string
+ *                 description: Updated feedback text
+ *     responses:
+ *       200:
+ *         description: Feedback updated successfully
+ *       404:
+ *         description: Feedback not found
+ *       500:
+ *         description: Error updating feedback
+ *   delete:
+ *     summary: Delete specific feedback
+ *     tags: [Feedback]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The feedback ID
+ *     responses:
+ *       200:
+ *         description: Feedback deleted successfully
+ *       404:
+ *         description: Feedback not found
+ *       500:
+ *         description: Error deleting feedback
  */
