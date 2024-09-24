@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/register', register);
 router.post('/login', login);
-router.post('/logout', logout); // New logout endpoint
+router.post('/logout', logout);
 
 /**
  * @openapi
@@ -21,7 +21,7 @@ router.post('/logout', logout); // New logout endpoint
  *     tags: [Auth]
  *     summary: Register a new user
  *     description: |
- *       Registers a new user with the provided username, password, first name, last name, email, and user role.
+ *       Registers a new user with the provided user number, password, first name, last name, email, and course ID.
  *     requestBody:
  *       required: true
  *       content:
@@ -29,9 +29,9 @@ router.post('/logout', logout); // New logout endpoint
  *           schema:
  *             type: object
  *             properties:
- *               Username:
- *                 type: string
- *                 example: 563758
+ *               UserNumber:
+ *                 type: integer
+ *                 example: 22345678
  *               Password:
  *                 type: string
  *                 example: securepassword123
@@ -44,13 +44,9 @@ router.post('/logout', logout); // New logout endpoint
  *               Email:
  *                 type: string
  *                 example: johndoe@example.com
- *               UserRole:
- *                 type: string
- *                 example: Lecture
  *               CourseID:
- *                 type: INT
+ *                 type: integer
  *                 example: 1
-
  *     responses:
  *       201:
  *         description: User successfully registered
@@ -62,6 +58,16 @@ router.post('/logout', logout); // New logout endpoint
  *                 message:
  *                   type: string
  *                   example: User registered
+ *       400:
+ *         description: Invalid UserNumber
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invalid UserNumber
  *       500:
  *         description: Error registering user
  *         content:
@@ -89,9 +95,9 @@ router.post('/logout', logout); // New logout endpoint
  *           schema:
  *             type: object
  *             properties:
- *               Username:
- *                 type: string
- *                 example: johndoe
+ *               UserNumber:
+ *                 type: integer
+ *                 example: 42345678
  *               Password:
  *                 type: string
  *                 example: securepassword123
@@ -149,9 +155,4 @@ router.post('/logout', logout); // New logout endpoint
  *                   example: User logged out
  */
 
-
 module.exports = router;
-
-
-
-
