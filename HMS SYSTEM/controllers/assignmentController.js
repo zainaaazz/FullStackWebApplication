@@ -1,6 +1,8 @@
 const sql = require('mssql');
 const dbConfig = require('../config/dbConfig'); // Assuming dbConfig is stored separately
 
+
+
 // Function to create a new assignment
 const createAssignment = async (req, res) => {
     const { title, instructions, dueDate, ModuleID } = req.body;
@@ -72,7 +74,7 @@ const getAllAssignmentsByModuleId = async (req, res) => {
 // Function to update assignment information
 const updateAssignment = async (req, res) => {
     const { id } = req.params;
-    const { ModuleID, title, instructions, dueDate } = req.body;
+    const { title, instructions, dueDate, ModuleID } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
@@ -104,4 +106,11 @@ const deleteAssignment = async (req, res) => {
     }
 };
 
-module.exports = { createAssignment, getAllAssignments, getAllAssignmentsByModuleId, getAssignmentById, updateAssignment, deleteAssignment };
+module.exports = { 
+    createAssignment, 
+    getAllAssignments, 
+    getAllAssignmentsByModuleId, 
+    getAssignmentById, 
+    updateAssignment, 
+    deleteAssignment 
+};

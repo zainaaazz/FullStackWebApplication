@@ -1,16 +1,23 @@
 const express = require('express');
 const authenticateJWT = require('../middlewares/authenticateJWT');
-const { createAssignment, getAllAssignments, getAllAssignment_ModuleById, getAssignmentById, updateAssignment, deleteAssignment } = require('../controllers/assignmentController');
+const {
+    createAssignment,
+    getAllAssignments,
+    getAllAssignmentsByModuleId,
+    getAssignmentById,
+    updateAssignment,
+    deleteAssignment,
+} = require('../controllers/assignmentController');
 
 const router = express.Router();
 
 // Assignment CRUD Operations
-router.post('/', authenticateJWT(['Admin', 'Lecture']), createAssignment); // Create a new assignment (Admin or Lecturer)
+router.post('/', authenticateJWT(['Admin', 'Lecture']), createAssignment); // Create a new assignment
 router.get('/', authenticateJWT(['Admin', 'Lecture', 'Student']), getAllAssignments); // Retrieve all assignments
-router.get('/module/:ModuleID', authenticateJWT(['Admin', 'Lecture', 'Student']), getAllAssignment_ModuleById); // Get all assignments for a specific module
+router.get('/module/:ModuleID', authenticateJWT(['Admin', 'Lecture', 'Student']), getAllAssignmentsByModuleId); // Get all assignments for a specific module
 router.get('/:id', authenticateJWT(['Admin', 'Lecture', 'Student']), getAssignmentById); // Get details of a specific assignment
-router.put('/:id', authenticateJWT(['Admin', 'Lecture']), updateAssignment); // Update assignment information (Admin or Lecturer)
-router.delete('/:id', authenticateJWT(['Admin', 'Lecture']), deleteAssignment); // Delete an assignment (Admin or Lecturer)
+router.put('/:id', authenticateJWT(['Admin', 'Lecture']), updateAssignment); // Update assignment information
+router.delete('/:id', authenticateJWT(['Admin', 'Lecture']), deleteAssignment); // Delete an assignment
 
 module.exports = router;
 
@@ -95,7 +102,7 @@ module.exports = router;
  *             properties:
  *               message:
  *                 type: string
- * */
+ */
 
 /**
  * @swagger
@@ -133,7 +140,7 @@ module.exports = router;
  *     tags: [Assignments]
  *     parameters:
  *       - in: path
- *          name : ModuleID
+ *         name: ModuleID
  *         schema:
  *           type: integer
  *         required: true
