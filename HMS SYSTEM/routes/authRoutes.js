@@ -3,7 +3,8 @@ const { register, login, logout } = require('../controllers/authController');
 
 const router = express.Router();
 
-router.post('/register', authenticateJWT(['Admin']), register);
+// Updated to allow registration without Admin authentication
+router.post('/register', register);
 router.post('/login', login);
 router.post('/logout', logout);
 
@@ -21,7 +22,7 @@ router.post('/logout', logout);
  *     tags: [Auth]
  *     summary: Register a new user
  *     description: |
- *       Registers a new user with the provided user number, password, first name, last name, email, and course ID.
+ *       Registers a new user with the provided user number, password, first name, last name, email, course ID, and role.
  *     requestBody:
  *       required: true
  *       content:
@@ -47,6 +48,9 @@ router.post('/logout', logout);
  *               CourseID:
  *                 type: integer
  *                 example: 1
+ *               UserRole:
+ *                 type: string
+ *                 example: 'Student'
  *     responses:
  *       201:
  *         description: User successfully registered
