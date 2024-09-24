@@ -21,9 +21,14 @@ const removeModuleFromCourse = async (req, res) => {
     const { id } = req.params;
     try {
         const pool = await sql.connect(dbConfig);
-        await pool.request()
+        const result = await pool.request()
             .input('ID', sql.Int, id)
             .query('DELETE FROM dbo.tblModuleOnCourse WHERE ID = @ID');
+
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ error: 'Module not found' });
+        }
+
         res.status(200).json({ message: 'Module removed from course successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error removing module from course: ' + err.message });
