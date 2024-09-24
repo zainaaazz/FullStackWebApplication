@@ -49,35 +49,4 @@ module.exports = router;
  *         description: File streaming initiated
  *       500:
  *         description: Error streaming file
- * /api/roles:
- *   get:
- *     summary: Retrieve a list of all roles
- *     tags: [Roles]
- *     responses:
- *       200:
- *         description: A list of roles
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Role'
- *       500:
- *         description: Error retrieving roles
- * /api/roles/{id}:
- *   put:
- *     summary: Update user role
- *     tags: [Roles]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: The user ID
- *     responses:
- *       200:
- *         description: User role updated successfully
- *       500:
- *         description: Error updating user role
  */
