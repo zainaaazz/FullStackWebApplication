@@ -5,24 +5,35 @@ const { addModuleToCourse, removeModuleFromCourse } = require('../controllers/mo
 const router = express.Router();
 
 // Module on Course Management
-router.post('/', authenticateJWT, addModuleToCourse); // Add a module to a course (Admin only)
-router.delete('/:id', authenticateJWT, removeModuleFromCourse); // Remove a module from a course (Admin only)
+router.post('/', authenticateJWT(['Admin']), addModuleToCourse); // Add a module to a course (Admin only)
+router.delete('/:id', authenticateJWT(['Admin']), removeModuleFromCourse); // Remove a module from a course (Admin only)
 
 module.exports = router;
 
 
 /**
  * @swagger
- * /api/module-on-course:
+ * /module-on-course:
  *   post:
  *     summary: Add a module to a course
  *     tags: [Modules on Courses]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               courseId:
+ *                 type: integer
+ *               moduleId:
+ *                 type: integer
  *     responses:
  *       201:
  *         description: Module added to course successfully
  *       500:
  *         description: Error adding module to course
- * /api/module-on-course/{id}:
+ * /module-on-course/{id}:
  *   delete:
  *     summary: Remove a module from a course
  *     tags: [Modules on Courses]
@@ -36,7 +47,8 @@ module.exports = router;
  *     responses:
  *       200:
  *         description: Module removed from course successfully
+ *       404:
+ *         description: Module not found
  *       500:
  *         description: Error removing module from course
  */
-
