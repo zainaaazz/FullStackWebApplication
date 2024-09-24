@@ -1,9 +1,9 @@
 const sql = require('mssql');
-const dbConfig = require('../config/dbConfig'); 
+const dbConfig = require('../config/dbConfig');
 
 // Function to create a new course
 const createCourse = async (req, res) => {
-    const { courseCode, courseName, duration, year } = req.body; // Added 'year' to the request body
+    const { courseCode, courseName, duration, year } = req.body; // Removed 'CourseID' from request body
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
@@ -35,7 +35,7 @@ const getCourseById = async (req, res) => {
     try {
         const pool = await sql.connect(dbConfig);
         const result = await pool.request()
-            .input('CourseID', sql.Int, id)
+            .input('CourseID', sql.Int, id)  // Keep 'CourseID' in params
             .query('SELECT * FROM dbo.tblCourse WHERE CourseID = @CourseID');
         const course = result.recordset[0];
         if (course) {
@@ -51,15 +51,15 @@ const getCourseById = async (req, res) => {
 // Function to update course information
 const updateCourse = async (req, res) => {
     const { id } = req.params;
-    const { courseCode, courseName, duration, year } = req.body; // Added 'year' to the request body
+    const { courseCode, courseName, duration, year } = req.body;  // Removed 'CourseID' from request body
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('CourseID', sql.Int, id)
+            .input('CourseID', sql.Int, id)  // Keep 'CourseID' in params
             .input('CourseCode', sql.NVarChar, courseCode)
             .input('CourseName', sql.NVarChar, courseName)
             .input('Duration', sql.Int, duration)
-            .input('Year', sql.Int, year)  // Added 'year' parameter
+            .input('Year', sql.Int, year)
             .query('UPDATE dbo.tblCourse SET CourseCode = @CourseCode, CourseName = @CourseName, Duration = @Duration, Year = @Year WHERE CourseID = @CourseID');
         res.status(200).json({ message: 'Course updated successfully' });
     } catch (err) {
@@ -73,7 +73,7 @@ const deleteCourse = async (req, res) => {
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('CourseID', sql.Int, id)
+            .input('CourseID', sql.Int, id)  // Keep 'CourseID' in params
             .query('DELETE FROM dbo.tblCourse WHERE CourseID = @CourseID');
         res.status(200).json({ message: 'Course deleted successfully' });
     } catch (err) {
