@@ -4,20 +4,7 @@ const sql = require('mssql');
 const dbConfig = require('../config/dbConfig');
 
 const register = async (req, res) => {
-    const { UserNumber, Password, FirstName, LastName, Email, CourseID } = req.body;
-    
-    // Determine UserRole based on UserNumber
-    let UserRole;
-    if (UserNumber.toString().startsWith('1') || UserNumber.toString().startsWith('2')) {
-        UserRole = 'Lecture';
-    } else if (UserNumber.toString().startsWith('3') || UserNumber.toString().startsWith('4')) {
-        UserRole = 'Student';
-    } else if (UserNumber.toString().startsWith('5')) {
-        UserRole = 'Admin';
-    } else {
-        return res.status(400).json({ error: 'Invalid UserNumber' });
-    }
-
+    const { UserNumber, Password, FirstName, LastName, Email, CourseID,UserRole} = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         const hashedPassword = await bcrypt.hash(Password, 10);
@@ -29,6 +16,7 @@ const register = async (req, res) => {
             .input('Email', sql.NVarChar, Email)
             .input('UserRole', sql.NVarChar, UserRole)
             .input('CourseID', sql.INT, CourseID)
+            .input('UserRole', sql.NVarChar, UserRole)
             .query('INSERT INTO dbo.tblUser (UserNumber, PasswordHash, FirstName, LastName, Email, UserRole, CourseID) VALUES (@UserNumber, @PasswordHash, @FirstName, @LastName, @Email, @UserRole, @CourseID)');
         res.status(201).json({ message: 'User registered' });
     } catch (err) {
