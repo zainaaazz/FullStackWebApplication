@@ -1,16 +1,18 @@
 const express = require('express');
+const authenticateJWT = require('../middlewares/authenticateJWT');
 const { getAllCourses, getCourseById, createCourse, updateCourse, deleteCourse } = require('../controllers/courseController');
 
 const router = express.Router();
 
 // Define routes for courses
-router.get('/', getAllCourses);  // Get all courses
-router.get('/:id', getCourseById);  // Get a specific course by ID
-router.post('/', createCourse);  // Create a new course
-router.put('/:id', updateCourse);  // Update course details
-router.delete('/:id', deleteCourse);  // Delete a course
+router.get('/', authenticateJWT(['Admin']), getAllCourses);  // Get all courses
+router.get('/:id', authenticateJWT(['Admin']), getCourseById);  // Get a specific course by ID
+router.post('/', authenticateJWT(['Admin']), createCourse);  // Create a new course
+router.put('/:id', authenticateJWT(['Admin']), updateCourse);  // Update course details
+router.delete('/:id', authenticateJWT(['Admin']), deleteCourse);  // Delete a course
 
 module.exports = router;
+
 
 /**
  * @swagger
