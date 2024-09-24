@@ -5,11 +5,11 @@ const { createModule, getAllModules, getModuleById, updateModule, deleteModule }
 const router = express.Router();
 
 // Module CRUD Operations
-router.post('/', authenticateJWT, createModule); // Create a new module (Admin only)
-router.get('/', authenticateJWT, getAllModules); // Retrieve all modules
-router.get('/:id', authenticateJWT, getModuleById); // Get details of a specific module
-router.put('/:id', authenticateJWT, updateModule); // Update module information (Admin only)
-router.delete('/:id', authenticateJWT, deleteModule); // Delete a module (Admin only)
+router.post('/', authenticateJWT(['Admin']), createModule); // Create a new module (Admin only)
+router.get('/', authenticateJWT(['Admin', 'Lecturer']), getAllModules); // Retrieve all modules
+router.get('/:id', authenticateJWT(['Admin', 'Lecturer']), getModuleById); // Get details of a specific module
+router.put('/:id', authenticateJWT(['Admin']), updateModule); // Update module information (Admin only)
+router.delete('/:id', authenticateJWT(['Admin']), deleteModule); // Delete a module (Admin only)
 
 module.exports = router;
 
@@ -24,20 +24,41 @@ module.exports = router;
  *         id:
  *           type: integer
  *           description: The module ID
+ *         moduleCode:
+ *           type: string
+ *           description: The unique code of the module
  *         moduleName:
  *           type: string
  *           description: The name of the module
  *         moduleDescription:
  *           type: string
  *           description: The description of the module
+ *         lecturerId:
+ *           type: integer
+ *           description: The ID of the lecturer for the module
  */
 
 /**
  * @swagger
- * /api/modules:
+ * /modules:
  *   post:
  *     summary: Create a new module
  *     tags: [Modules]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               moduleCode:
+ *                 type: string
+ *               moduleName:
+ *                 type: string
+ *               moduleDescription:
+ *                 type: string
+ *               lecturerId:
+ *                 type: integer
  *     responses:
  *       201:
  *         description: Module created successfully
@@ -57,7 +78,7 @@ module.exports = router;
  *                 $ref: '#/components/schemas/Module'
  *       500:
  *         description: Error retrieving modules
- * /api/modules/{id}:
+ * /modules/{id}:
  *   get:
  *     summary: Get details of a specific module
  *     tags: [Modules]
@@ -89,6 +110,21 @@ module.exports = router;
  *           type: integer
  *         required: true
  *         description: The module ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               moduleCode:
+ *                 type: string
+ *               moduleName:
+ *                 type: string
+ *               moduleDescription:
+ *                 type: string
+ *               lecturerId:
+ *                 type: integer
  *     responses:
  *       200:
  *         description: Module updated successfully
