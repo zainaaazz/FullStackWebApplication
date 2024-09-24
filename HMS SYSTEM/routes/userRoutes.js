@@ -5,14 +5,15 @@ const { getAllUsers, getUserById, updateUser, deleteUser } = require('../control
 const router = express.Router();
 
 // Existing routes - restricted to Admin
-router.get('/', authenticateJWT, getAllUsers);
-router.get('/:id', authenticateJWT, getUserById);
+router.get('/', authenticateJWT(['Admin']), getAllUsers);
+router.get('/:id', authenticateJWT(['Admin']), getUserById);
 
 // Update and delete user routes - restricted to Admin
-router.put('/:id', authenticateJWT, updateUser);
-router.delete('/:id', authenticateJWT, deleteUser);
+router.put('/:id', authenticateJWT(['Admin']), updateUser);
+router.delete('/:id', authenticateJWT(['Admin']), deleteUser);
 
 module.exports = router;
+
 
 /**
  * @swagger
