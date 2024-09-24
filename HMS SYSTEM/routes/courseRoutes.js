@@ -13,7 +13,6 @@ router.delete('/:id', authenticateJWT(['Admin']), deleteCourse);  // Delete a co
 
 module.exports = router;
 
-
 /**
  * @swagger
  * components:
@@ -21,9 +20,7 @@ module.exports = router;
  *     Course:
  *       type: object
  *       properties:
- *         id:
- *           type: integer
- *           description: The course ID
+ *         // Removed CourseID from the schema
  *         courseCode:
  *           type: string
  *           description: The unique course code
@@ -60,7 +57,21 @@ module.exports = router;
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Course'
+ *             type: object
+ *             properties:
+ *               courseCode:
+ *                 type: string
+ *                 description: The unique course code
+ *               courseName:
+ *                 type: string
+ *                 description: The course name
+ *               duration:
+ *                 type: integer
+ *                 description: Duration of the course in years
+ *             required:
+ *               - courseCode
+ *               - courseName
+ *               - duration
  *     responses:
  *       201:
  *         description: Course created successfully
