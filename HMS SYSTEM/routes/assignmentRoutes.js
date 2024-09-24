@@ -6,8 +6,8 @@ const router = express.Router();
 
 // Assignment CRUD Operations
 router.post('/', authenticateJWT(['Admin', 'Lecture']), createAssignment); // Create a new assignment (Admin or Lecturer)
-router.get('/', authenticateJWT(['Admin', 'Lecture']), getAllAssignments); // Retrieve all assignments
-router.get('/:id', authenticateJWT(['Admin', 'Lecture']), getAssignmentById); // Get details of a specific assignment
+router.get('/', authenticateJWT(['Admin','Lecture','Student']), getAllAssignments); // Retrieve all assignments
+router.get('/:id', authenticateJWT(['Admin', 'Lecture','Student']), getAssignmentById); // Get details of a specific assignment
 router.put('/:id', authenticateJWT(['Admin', 'Lecture']), updateAssignment); // Update assignment information (Admin or Lecturer)
 router.delete('/:id', authenticateJWT(['Admin', 'Lecture']), deleteAssignment); // Delete an assignment (Admin or Lecturer)
 
