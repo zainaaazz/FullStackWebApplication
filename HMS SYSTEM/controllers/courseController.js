@@ -1,16 +1,17 @@
 const sql = require('mssql');
-const dbConfig = require('../config/dbConfig'); // Assuming dbConfig is stored separately
+const dbConfig = require('../config/dbConfig'); 
 
 // Function to create a new course
 const createCourse = async (req, res) => {
-    const { courseCode, courseName, duration } = req.body;
+    const { courseCode, courseName, duration, year } = req.body; // Added 'year' to the request body
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
             .input('CourseCode', sql.NVarChar, courseCode)
             .input('CourseName', sql.NVarChar, courseName)
             .input('Duration', sql.Int, duration)
-            .query('INSERT INTO dbo.tblCourse (CourseCode, CourseName, Duration) VALUES (@CourseCode, @CourseName, @Duration)');
+            .input('Year', sql.Int, year)  // Added 'year' parameter
+            .query('INSERT INTO dbo.tblCourse (CourseCode, CourseName, Duration, Year) VALUES (@CourseCode, @CourseName, @Duration, @Year)');
         res.status(201).json({ message: 'Course created successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error creating course: ' + err.message });
@@ -50,7 +51,7 @@ const getCourseById = async (req, res) => {
 // Function to update course information
 const updateCourse = async (req, res) => {
     const { id } = req.params;
-    const { courseCode, courseName, duration } = req.body;
+    const { courseCode, courseName, duration, year } = req.body; // Added 'year' to the request body
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
@@ -58,7 +59,8 @@ const updateCourse = async (req, res) => {
             .input('CourseCode', sql.NVarChar, courseCode)
             .input('CourseName', sql.NVarChar, courseName)
             .input('Duration', sql.Int, duration)
-            .query('UPDATE dbo.tblCourse SET CourseCode = @CourseCode, CourseName = @CourseName, Duration = @Duration WHERE CourseID = @CourseID');
+            .input('Year', sql.Int, year)  // Added 'year' parameter
+            .query('UPDATE dbo.tblCourse SET CourseCode = @CourseCode, CourseName = @CourseName, Duration = @Duration, Year = @Year WHERE CourseID = @CourseID');
         res.status(200).json({ message: 'Course updated successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error updating course: ' + err.message });
