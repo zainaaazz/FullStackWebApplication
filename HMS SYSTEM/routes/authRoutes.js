@@ -4,7 +4,7 @@ const { register, login, logout } = require('../controllers/authController');
 const router = express.Router();
 
 // Updated to allow registration without Admin authentication
-router.post('/register', register);
+router.post('/register',authenticateJWT(['Admin']),register);
 router.post('/login', login);
 router.post('/logout', logout);
 
