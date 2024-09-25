@@ -20,9 +20,9 @@ module.exports = router;
  *     Feedback:
  *       type: object
  *       properties:
- *         id:
+ *         mark:
  *           type: integer
- *           description: The feedback ID
+ *           description: Mark given for your submission
  *         submissionId:
  *           type: integer
  *           description: The ID of the submission
@@ -30,8 +30,12 @@ module.exports = router;
  *           type: integer
  *           description: The ID of the lecturer providing feedback
  *         feedbackText:
- *           type: string
+ *           type: stringd
  *           description: The feedback text
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: The date which the feedback was provided
  */
 
 /**

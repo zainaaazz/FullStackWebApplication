@@ -19,9 +19,6 @@ module.exports = router;
  *     Enrollment:
  *       type: object
  *       properties:
- *         EnrollmentID:
- *           type: integer
- *           description: The enrollment ID
  *         StudentID:
  *           type: integer
  *           description: The ID of the student
