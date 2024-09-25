@@ -10,6 +10,19 @@ router.delete('/:id', authenticateJWT(['Admin']), removeModuleFromCourse); // Re
 
 module.exports = router;
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Feedback:
+ *       type: object
+ *       properties:
+ *         courseId:
+ *           type: integer
+ *          moduleId:
+ *            type: integer
+ */
+
 
 /**
  * @swagger
