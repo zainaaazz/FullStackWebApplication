@@ -17,6 +17,35 @@ module.exports = router;
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *      User:
+ *       type: object
+ *       properties:
+*         Username:
+ *             type: string
+ *             description:The assinged username for user
+ *        FirstName:
+ *             type: string
+ *             description: The name of the user
+ *        LastName:
+ *             type: string
+ *             description:The surname of the user
+ *        Email:
+ *             type: string
+ *             description:Users email 
+ *        UserRole:
+ *             type: string
+ *             description:The users role 
+ *        CourseID:
+ *             type: integer
+ *             description:The course ID enrolled to the user
+ */
+
+
+
+/**
+ * @swagger
  * /users:
  *   get:
  *     summary: Get a list of all users (Admins only)

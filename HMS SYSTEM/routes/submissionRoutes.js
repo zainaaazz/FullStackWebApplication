@@ -21,16 +21,16 @@ module.exports = router;
  *     Submission:
  *       type: object
  *       properties:
- *         id:
+ *         videoId:
  *           type: integer
- *           description: The submission ID
+ *           description: The video submitted ID
  *         studentId:
  *           type: integer
  *           description: The ID of the student who made the submission
  *         assignmentId:
  *           type: integer
  *           description: The ID of the assignment
- *         submissionText:
+ *         status:
  *           type: string
  *           description: The text of the submission
  */
