@@ -21,9 +21,6 @@ module.exports = router;
  *     Module:
  *       type: object
  *       properties:
- *         id:
- *           type: integer
- *           description: The module ID
  *         moduleCode:
  *           type: string
  *           description: The unique code of the module
