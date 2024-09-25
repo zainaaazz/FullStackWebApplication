@@ -30,6 +30,9 @@ module.exports = router;
  *         duration:
  *           type: integer
  *           description: Duration of the course in years
+ *         Year:
+ *           type: integer
+ *           description: The year your enrolling in the course
  */
 
 /**
