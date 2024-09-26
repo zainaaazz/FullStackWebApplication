@@ -55,11 +55,20 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Video'
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Video uploaded successfully'
+ *                 videoID:
+ *                   type: int
+ *                   example: 123
  *       500:
  *         description: Server error
+ * 
+ *        
  */
-router.post('/', authenticateJWT, upload.single('file'), uploadVideo);
+router.post('/', upload.single('file'), uploadVideo);
 
 /**
  * @swagger
@@ -79,7 +88,7 @@ router.post('/', authenticateJWT, upload.single('file'), uploadVideo);
  *       500:
  *         description: Server error
  */
-router.get('/', authenticateJWT, getAllVideos);
+router.get('/', getAllVideos);
 
 /**
  * @swagger
@@ -129,6 +138,6 @@ router.get('/:id', authenticateJWT, getVideoById);
  *       500:
  *         description: Server error
  */
-router.delete('/:id', authenticateJWT, deleteVideo);
+router.delete('/:id', deleteVideo);
 
 module.exports = router;
