@@ -3,14 +3,15 @@ const dbConfig = require('../config/dbConfig'); // Assuming dbConfig is stored s
 
 // Function to submit an assignment
 const submitAssignment = async (req, res) => {
-    const { studentId, assignmentId, submissionText } = req.body;
+    const { studentId, assignmentId, submissionText, videoId } = req.body; // Added videoId
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
             .input('StudentID', sql.Int, studentId)
             .input('AssignmentID', sql.Int, assignmentId)
             .input('SubmissionText', sql.NVarChar, submissionText)
-            .query('INSERT INTO dbo.tblSubmission (StudentID, AssignmentID, SubmissionText) VALUES (@StudentID, @AssignmentID, @SubmissionText)');
+            .input('VideoID', sql.Int, videoId) // Added VideoID
+            .query('INSERT INTO dbo.tblSubmission (StudentID, AssignmentID, SubmissionText, VideoID) VALUES (@StudentID, @AssignmentID, @SubmissionText, @VideoID)');
         res.status(201).json({ message: 'Assignment submitted successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error submitting assignment: ' + err.message });
