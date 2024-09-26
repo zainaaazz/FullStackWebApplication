@@ -9,6 +9,8 @@ const enrollmentRoutes = require('./routes/enrollmentRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const submissionRoutes = require('./routes/submissionRoutes');
 const authRoutes = require('./routes/authRoutes');
+const utilityRoutes = require('./routes/utilityRoutes');
+
 
 const app = express();
 
@@ -25,6 +27,7 @@ app.use('/enrollments', enrollmentRoutes);
 app.use('/feedbacks', feedbackRoutes);
 app.use('/submissions', submissionRoutes);
 app.use('/auth', authRoutes);
+app.use('/api', utilityRoutes);
 
 // Swagger setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
