@@ -3,14 +3,15 @@ const dbConfig = require('../config/dbConfig'); // Assuming dbConfig is stored s
 
 // Function to provide feedback on a submission
 const provideFeedback = async (req, res) => {
-    const { submissionId, lecturerId, feedbackText } = req.body;
+    const { submissionId, lectureId, feedbackText, mark } = req.body; // Include mark
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
             .input('SubmissionID', sql.Int, submissionId)
-            .input('LecturerID', sql.Int, lecturerId)
+            .input('Lecture_ID', sql.Int, lectureId)
             .input('FeedbackText', sql.NVarChar, feedbackText)
-            .query('INSERT INTO dbo.tblFeedback (SubmissionID, LecturerID, FeedbackText) VALUES (@SubmissionID, @LecturerID, @FeedbackText)');
+            .input('Mark', sql.Int, mark) // Include mark
+            .query('INSERT INTO dbo.tblFeedback (SubmissionID, Lecture_ID, FeedbackText, Mark) VALUES (@SubmissionID, @Lecture_ID, @FeedbackText, @Mark)');
         res.status(201).json({ message: 'Feedback provided successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error providing feedback: ' + err.message });
@@ -21,7 +22,7 @@ const provideFeedback = async (req, res) => {
 const getAllFeedback = async (req, res) => {
     try {
         const pool = await sql.connect(dbConfig);
-        const result = await pool.request().query('SELECT * FROM dbo.tblFeedback');
+        const result = await pool.request().query('SELECT TOP (1000) SubmissionID, FeedbackText, Mark, Lecture_ID FROM dbo.tblFeedback');
         res.json(result.recordset);
     } catch (err) {
         res.status(500).json({ error: 'Error retrieving feedback: ' + err.message });
@@ -35,7 +36,7 @@ const getFeedbackById = async (req, res) => {
         const pool = await sql.connect(dbConfig);
         const result = await pool.request()
             .input('FeedbackID', sql.Int, id)
-            .query('SELECT * FROM dbo.tblFeedback WHERE FeedbackID = @FeedbackID');
+            .query('SELECT SubmissionID, FeedbackText, Mark, Lecture_ID FROM dbo.tblFeedback WHERE FeedbackID = @FeedbackID');
         const feedback = result.recordset[0];
         if (feedback) {
             res.json(feedback);
@@ -50,16 +51,15 @@ const getFeedbackById = async (req, res) => {
 // Update feedback by ID
 const updateFeedback = async (req, res) => {
     const { id } = req.params;
-    const { feedbackText } = req.body;
+    const { feedbackText, mark } = req.body; // Include mark
     try {
-        // Logic to update the feedback in the database
-        const feedback = await Feedback.findById(id);
-        if (!feedback) {
-            return res.status(404).json({ message: 'Feedback not found' });
-        }
-        feedback.feedbackText = feedbackText;
-        await feedback.save();
-        res.status(200).json({ message: 'Feedback updated successfully', feedback });
+        const pool = await sql.connect(dbConfig);
+        await pool.request()
+            .input('FeedbackID', sql.Int, id)
+            .input('FeedbackText', sql.NVarChar, feedbackText)
+            .input('Mark', sql.Int, mark) // Include mark
+            .query('UPDATE dbo.tblFeedback SET FeedbackText = @FeedbackText, Mark = @Mark WHERE FeedbackID = @FeedbackID');
+        res.status(200).json({ message: 'Feedback updated successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error updating feedback', error });
     }
@@ -69,12 +69,14 @@ const updateFeedback = async (req, res) => {
 const deleteFeedback = async (req, res) => {
     const { id } = req.params;
     try {
-        // Logic to delete the feedback from the database
-        const feedback = await Feedback.findById(id);
-        if (!feedback) {
+        const pool = await sql.connect(dbConfig);
+        const result = await pool.request()
+            .input('FeedbackID', sql.Int, id)
+            .query('DELETE FROM dbo.tblFeedback WHERE FeedbackID = @FeedbackID');
+        
+        if (result.rowsAffected[0] === 0) {
             return res.status(404).json({ message: 'Feedback not found' });
         }
-        await feedback.remove();
         res.status(200).json({ message: 'Feedback deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting feedback', error });
@@ -88,4 +90,3 @@ module.exports = {
     updateFeedback,
     deleteFeedback,
 };
-

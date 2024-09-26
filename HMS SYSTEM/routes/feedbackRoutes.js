@@ -5,11 +5,11 @@ const { provideFeedback, getAllFeedback, getFeedbackById, updateFeedback, delete
 const router = express.Router();
 
 // Feedback Operations
-router.post('/', authenticateJWT, provideFeedback); // Provide feedback on a submission (Lecturer only)
-router.get('/', authenticateJWT, getAllFeedback); // Retrieve all feedback (Admin, Lecturer, and Student)
-router.get('/:id', authenticateJWT, getFeedbackById); // Get details of specific feedback (Admin, Lecturer, and Student)
-router.put('/:id', authenticateJWT, updateFeedback); // Update specific feedback (Lecturer only)
-router.delete('/:id', authenticateJWT, deleteFeedback); // Delete specific feedback (Admin only)
+router.post('/', authenticateJWT(['Admin', 'Lecture']), provideFeedback); // Provide feedback on a submission (Lecturer and Admin)
+router.get('/', authenticateJWT(['Admin', 'Lecture']), getAllFeedback); // Retrieve all feedback (Admin,  Student)
+router.get('/:id',  authenticateJWT(['Admin', 'Lecture']),getFeedbackById); // Get details of specific feedback (Admin, Lecturer)
+router.put('/:id', authenticateJWT(['Admin', 'Lecture']),updateFeedback); // Update specific feedback (Lecturer and Admin)
+router.delete('/:id', authenticateJWT(['Admin', 'Lecture']),deleteFeedback); // Delete specific feedback (Admin and Lecture)
 
 module.exports = router;
 
@@ -26,21 +26,17 @@ module.exports = router;
  *         submissionId:
  *           type: integer
  *           description: The ID of the submission
- *         lecturerId:
+ *         lectureId:
  *           type: integer
- *           description: The ID of the lecturer providing feedback
+ *           description: The ID of the lecture associated with the feedback
  *         feedbackText:
- *           type: stringd
- *           description: The feedback text
- *         createdAt:
  *           type: string
- *           format: date-time
- *           description: The date which the feedback was provided
+ *           description: The feedback text
  */
 
 /**
  * @swagger
- * /api/feedback:
+ * /feedbacks:
  *   post:
  *     summary: Provide feedback on a submission
  *     tags: [Feedback]
@@ -54,9 +50,15 @@ module.exports = router;
  *               submissionId:
  *                 type: integer
  *                 description: ID of the submission
+ *               lectureId:
+ *                 type: integer
+ *                 description: ID of the lecture associated with the feedback
  *               feedbackText:
  *                 type: string
  *                 description: The feedback text
+ *               mark:
+ *                 type: integer
+ *                 description: Mark given for your submission
  *     responses:
  *       201:
  *         description: Feedback provided successfully
@@ -76,7 +78,7 @@ module.exports = router;
  *                 $ref: '#/components/schemas/Feedback'
  *       500:
  *         description: Error retrieving feedback
- * /api/feedback/{id}:
+ * /feedbacks/{id}:
  *   get:
  *     summary: Get details of specific feedback
  *     tags: [Feedback]
@@ -118,6 +120,9 @@ module.exports = router;
  *               feedbackText:
  *                 type: string
  *                 description: Updated feedback text
+ *               mark:
+ *                 type: integer
+ *                 description: Updated mark
  *     responses:
  *       200:
  *         description: Feedback updated successfully
