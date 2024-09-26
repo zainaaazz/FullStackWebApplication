@@ -20,11 +20,10 @@ module.exports = router;
  *         courseId:
  *           type: integer
  *           description: The ID of the course
- *          moduleId:
- *            type: integer
- *            description: The ID of the module on course
+ *         moduleId:
+ *           type: integer
+ *           description: The ID of the module on course
  */
-
 
 /**
  * @swagger
