@@ -1,11 +1,18 @@
 const express = require('express');
 const authenticateJWT = require('../middlewares/authenticateJWT');
 const { uploadVideo, getAllVideos, getVideoById, deleteVideo } = require('../controllers/videoController');
+
+// Set file size limit (500MB in this example)
+const maxFileSize = 500 * 1024 * 1024;  // 500MB in bytes
+
+
 const multer = require('multer');
-const storage = multer.memoryStorage(); // Use memory storage for multer
+const storage = multer.memoryStorage();  // Store files in memory
 const upload = multer({ storage: storage });
 
 const router = express.Router();
+
+
 
 /**
  * @swagger
@@ -115,7 +122,7 @@ router.get('/', getAllVideos);
  *       500:
  *         description: Server error
  */
-router.get('/:id', authenticateJWT, getVideoById);
+router.get('/:id', getVideoById);
 
 /**
  * @swagger
