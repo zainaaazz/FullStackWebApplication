@@ -1,5 +1,8 @@
 const sql = require('mssql');
 const dbConfig = require('../config/dbConfig'); // Assuming dbConfig is stored separately
+const { Parser } = require('json2csv');  // For converting JSON to CSV
+const fs = require('fs');
+const path = require('path');
 
 // Function to provide feedback on a submission
 const provideFeedback = async (req, res) => {
