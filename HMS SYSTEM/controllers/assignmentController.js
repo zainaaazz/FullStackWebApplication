@@ -31,13 +31,14 @@ const getAllAssignments = async (req, res) => {
     }
 };
 
+//Updated Function By Simphiwe: Reason Had issues testing
 // Function to get details of a specific assignment by AssignmentID
 const getAssignmentById = async (req, res) => {
-    const { id } = req.params;
+    const assignmentId = parseInt(req.params.id, 10);  // Parse ID to integer
     try {
         const pool = await sql.connect(dbConfig);
         const result = await pool.request()
-            .input('AssignmentID', sql.Int, id)
+            .input('AssignmentID', sql.Int, assignmentId)  // Pass as integer
             .query('SELECT AssignmentID, Title, Instructions, CreatedAt, DueDate, ModuleID FROM dbo.tblAssignment WHERE AssignmentID = @AssignmentID');
         
         const assignment = result.recordset[0];
@@ -50,6 +51,7 @@ const getAssignmentById = async (req, res) => {
         res.status(500).json({ error: 'Error retrieving assignment: ' + err.message });
     }
 };
+
 
 // Function to get all assignments for a specific module by ModuleID
 const getAllAssignmentsByModuleId = async (req, res) => {
@@ -73,33 +75,38 @@ const getAllAssignmentsByModuleId = async (req, res) => {
 
 // Function to update assignment information
 const updateAssignment = async (req, res) => {
-    const { id } = req.params;
+    const assignmentId = parseInt(req.params.id, 10);  // Parse ID to integer
     const { title, instructions, dueDate, ModuleID } = req.body;
+
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('AssignmentID', sql.Int, id)
-            .input('ModuleID', sql.Int, ModuleID)
+            .input('AssignmentID', sql.Int, assignmentId)  // Pass as integer
             .input('Title', sql.NVarChar, title)
             .input('Instructions', sql.NVarChar, instructions)
             .input('DueDate', sql.DateTime, dueDate)
+            .input('ModuleID', sql.Int, ModuleID)
             .query('UPDATE dbo.tblAssignment SET Title = @Title, Instructions = @Instructions, DueDate = @DueDate, ModuleID = @ModuleID WHERE AssignmentID = @AssignmentID');
-        
+
         res.status(200).json({ message: 'Assignment updated successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error updating assignment: ' + err.message });
     }
 };
 
+
+
+
 // Function to delete an assignment
 const deleteAssignment = async (req, res) => {
-    const { id } = req.params;
+    const assignmentId = parseInt(req.params.id, 10);  // Parse ID to integer
+
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('AssignmentID', sql.Int, id)
+            .input('AssignmentID', sql.Int, assignmentId)  // Pass as integer
             .query('DELETE FROM dbo.tblAssignment WHERE AssignmentID = @AssignmentID');
-        
+
         res.status(200).json({ message: 'Assignment deleted successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error deleting assignment: ' + err.message });

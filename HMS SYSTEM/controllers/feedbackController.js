@@ -1,5 +1,5 @@
 const sql = require('mssql');
-const dbConfig = require('../config/dbConfig'); // Assuming dbConfig is stored separately
+const dbConfig = require('../config/dbConfig');
 
 // Function to provide feedback on a submission
 const provideFeedback = async (req, res) => {
@@ -51,15 +51,24 @@ const getFeedbackById = async (req, res) => {
 // Update feedback by ID
 const updateFeedback = async (req, res) => {
     const { id } = req.params;
-    const { feedbackText, mark } = req.body; // Include mark
+    const { feedbackText } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
+        const result = await pool.request()
+            .input('FeedbackID', sql.Int, id)
+            .query('SELECT * FROM dbo.tblFeedback WHERE FeedbackID = @FeedbackID');
+        
+        const feedback = result.recordset[0];
+        if (!feedback) {
+            return res.status(404).json({ message: 'Feedback not found' });
+        }
+
         await pool.request()
             .input('FeedbackID', sql.Int, id)
             .input('FeedbackText', sql.NVarChar, feedbackText)
-            .input('Mark', sql.Int, mark) // Include mark
-            .query('UPDATE dbo.tblFeedback SET FeedbackText = @FeedbackText, Mark = @Mark WHERE FeedbackID = @FeedbackID');
-        res.status(200).json({ message: 'Feedback updated successfully' });
+            .query('UPDATE dbo.tblFeedback SET FeedbackText = @FeedbackText WHERE FeedbackID = @FeedbackID');
+        
+        res.status(200).json({ message: 'Feedback updated successfully', feedback: { ...feedback, FeedbackText: feedbackText } });
     } catch (error) {
         res.status(500).json({ message: 'Error updating feedback', error });
     }
@@ -72,11 +81,17 @@ const deleteFeedback = async (req, res) => {
         const pool = await sql.connect(dbConfig);
         const result = await pool.request()
             .input('FeedbackID', sql.Int, id)
-            .query('DELETE FROM dbo.tblFeedback WHERE FeedbackID = @FeedbackID');
+            .query('SELECT * FROM dbo.tblFeedback WHERE FeedbackID = @FeedbackID');
         
-        if (result.rowsAffected[0] === 0) {
+        const feedback = result.recordset[0];
+        if (!feedback) {
             return res.status(404).json({ message: 'Feedback not found' });
         }
+
+        await pool.request()
+            .input('FeedbackID', sql.Int, id)
+            .query('DELETE FROM dbo.tblFeedback WHERE FeedbackID = @FeedbackID');
+        
         res.status(200).json({ message: 'Feedback deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting feedback', error });

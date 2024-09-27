@@ -49,11 +49,20 @@ const getModuleById = async (req, res) => {
 };
 
 // Function to update module information
+// Update module information
 const updateModule = async (req, res) => {
     const { id } = req.params;
     const { moduleCode, moduleName, moduleDescription, lecturerId } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
+        const result = await pool.request()
+            .input('ModuleID', sql.Int, id)
+            .query('SELECT * FROM dbo.tblModule WHERE ModuleID = @ModuleID');
+
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ error: 'Module not found' });
+        }
+
         await pool.request()
             .input('ModuleID', sql.Int, id)
             .input('ModuleCode', sql.VarChar, moduleCode)
@@ -61,24 +70,35 @@ const updateModule = async (req, res) => {
             .input('ModuleDescription', sql.NVarChar, moduleDescription)
             .input('Lecturer', sql.Int, lecturerId)
             .query('UPDATE dbo.tblModule SET ModuleCode = @ModuleCode, ModuleName = @ModuleName, Description = @ModuleDescription, Lecturer = @Lecturer WHERE ModuleID = @ModuleID');
+
         res.status(200).json({ message: 'Module updated successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error updating module: ' + err.message });
     }
 };
 
-// Function to delete a module
+// Delete a module
 const deleteModule = async (req, res) => {
     const { id } = req.params;
     try {
         const pool = await sql.connect(dbConfig);
+        const result = await pool.request()
+            .input('ModuleID', sql.Int, id)
+            .query('SELECT * FROM dbo.tblModule WHERE ModuleID = @ModuleID');
+
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ error: 'Module not found' });
+        }
+
         await pool.request()
             .input('ModuleID', sql.Int, id)
             .query('DELETE FROM dbo.tblModule WHERE ModuleID = @ModuleID');
+        
         res.status(200).json({ message: 'Module deleted successfully' });
     } catch (err) {
         res.status(500).json({ error: 'Error deleting module: ' + err.message });
     }
 };
+
 
 module.exports = { createModule, getAllModules, getModuleById, updateModule, deleteModule };
