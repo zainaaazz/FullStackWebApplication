@@ -23,5 +23,8 @@
     "jest-mock": "^29.7.0",
     "mssql": "^11.0.1",
     "supertest": "^7.0.0"
-  }
+  },
+  "scripts": {
+    "test": "jest"
+}
 }
