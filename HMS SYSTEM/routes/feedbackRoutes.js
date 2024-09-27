@@ -1,6 +1,6 @@
 const express = require('express');
 const authenticateJWT = require('../middlewares/authenticateJWT');
-const { provideFeedback, getAllFeedback, getFeedbackById, updateFeedback, deleteFeedback } = require('../controllers/feedbackController');
+const { provideFeedback, getAllFeedback, getFeedbackById, updateFeedback, deleteFeedback, downloadFeedbackCSV } = require('../controllers/feedbackController');
 
 const router = express.Router();
 
@@ -8,6 +8,8 @@ const router = express.Router();
 router.post('/', authenticateJWT(['Admin', 'Lecture']), provideFeedback); // Provide feedback on a submission (Lecturer and Admin)
 router.get('/', authenticateJWT(['Admin', 'Lecture']), getAllFeedback); // Retrieve all feedback (Admin,  Student)
 router.get('/:id',  authenticateJWT(['Admin', 'Lecture']),getFeedbackById); // Get details of specific feedback (Admin, Lecturer)
+// Download feedback as CSV
+router.get('/download/csv', authenticateJWT(['Admin']), downloadFeedbackCSV); // New route for CSV download
 router.put('/:id', authenticateJWT(['Admin', 'Lecture']),updateFeedback); // Update specific feedback (Lecturer and Admin)
 router.delete('/:id', authenticateJWT(['Admin', 'Lecture']),deleteFeedback); // Delete specific feedback (Admin and Lecture)
 
@@ -147,4 +149,25 @@ module.exports = router;
  *         description: Feedback not found
  *       500:
  *         description: Error deleting feedback
+ */
+
+
+/**
+ * @swagger
+ * /feedbacks/download/csv:
+ *   get:
+ *     summary: Download feedback data as CSV
+ *     tags: [Feedback]
+ *     responses:
+ *       200:
+ *         description: CSV file of feedback data
+ *         content:
+ *           text/csv:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       404:
+ *         description: No feedback data found
+ *       500:
+ *         description: Error generating feedback CSV
  */
