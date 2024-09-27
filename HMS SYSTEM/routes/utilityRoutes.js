@@ -9,8 +9,8 @@ router.get('/files/download/:id', downloadFile); // Download a file (Admin, Lect
 router.get('/files/stream/:id', streamFile); // Stream a file (Admin and Lecturer)
 
 // Role-Based Access Control
-router.get('/roles', authenticateJWT, getAllRoles); // Retrieve all roles (Admin only)
-router.put('/roles/:id', authenticateJWT, updateUserRole); // Update user role (Admin only)
+router.get('/roles', authenticateJWT(['Admin', 'Lecture']), getAllRoles); // Retrieve all roles (Admin and Lecture)
+router.put('/roles/:id', authenticateJWT(['Admin', 'Lecture']), updateUserRole); // Update user role (Admin and Lecture)
 
 module.exports = router;
 /**
