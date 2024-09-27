@@ -75,7 +75,7 @@ const router = express.Router();
  * 
  *        
  */
-router.post('/', upload.single('file'), uploadVideo);
+router.post('/', authenticateJWT(['Admin', 'Student']), upload.single('file'), uploadVideo);
 
 /**
  * @swagger
@@ -95,7 +95,7 @@ router.post('/', upload.single('file'), uploadVideo);
  *       500:
  *         description: Server error
  */
-router.get('/', getAllVideos);
+router.get('/', authenticateJWT(['Admin','Lecture']), getAllVideos);
 
 /**
  * @swagger
@@ -122,7 +122,7 @@ router.get('/', getAllVideos);
  *       500:
  *         description: Server error
  */
-router.get('/:id', getVideoById);
+router.get('/:id', authenticateJWT(['Admin', 'Student','Lecture']), getVideoById);
 
 /**
  * @swagger
@@ -145,6 +145,6 @@ router.get('/:id', getVideoById);
  *       500:
  *         description: Server error
  */
-router.delete('/:id', deleteVideo);
+router.delete('/:id', authenticateJWT(['Admin', 'Student']), deleteVideo);
 
 module.exports = router;
