@@ -1,0 +1,34 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on pushes to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+    - name: Build Docker image
+      run: |
+        docker build -t 37833707/nwu-hms .
+
+    - name: Push to Docker Hub
+      run: docker push 37833707/nwu-hms
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: NWU-HMS  # Name of your Azure Web App
+        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}  # Publish profile secret
+        images: 37833707/nwu-hms  # Docker image to deploy
