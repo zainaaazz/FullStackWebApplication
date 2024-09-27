@@ -14,5 +14,9 @@ Java can't See Sharp
 * Shane Ndobela - @ShaneWeb-dev
 * Thando Gumbi - @Thando1221
 * Simphiwe Nhlapo - @SimphiweNhlapo
+* ## API Documentation
+
+You can access the API documentation at: [https://nwu-hms-g6fjckard7fggqar.southafricanorth-01.azurewebsites.net/api-docs/](https://nwu-hms-g6fjckard7fggqar.southafricanorth-01.azurewebsites.net/api-docs/).
+
 
 
