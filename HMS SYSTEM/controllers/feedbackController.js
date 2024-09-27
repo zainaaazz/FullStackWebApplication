@@ -1,5 +1,5 @@
 const sql = require('mssql');
-const dbConfig = require('../config/dbConfig');
+const dbConfig = require('../config/dbConfig'); // Assuming dbConfig is stored separately
 
 // Function to provide feedback on a submission
 const provideFeedback = async (req, res) => {
@@ -98,10 +98,48 @@ const deleteFeedback = async (req, res) => {
     }
 };
 
+// Function to generate and download feedback as CSV
+const downloadFeedbackCSV = async (req, res) => {
+    try {
+        const pool = await sql.connect(dbConfig);
+        const result = await pool.request().query('SELECT SubmissionID, FeedbackText, Mark, Lecture_ID FROM dbo.tblFeedback');
+        const feedbackData = result.recordset;
+
+        if (feedbackData.length === 0) {
+            return res.status(404).json({ message: 'No feedback data found' });
+        }
+
+        // Convert JSON data to CSV
+        const json2csvParser = new Parser({ fields: ['SubmissionID', 'FeedbackText', 'Mark', 'Lecture_ID'] });
+        const csv = json2csvParser.parse(feedbackData);
+
+        // Define the file path and name
+        const filePath = path.join(__dirname, '../temp', `feedback_${Date.now()}.csv`);
+        
+        // Save the CSV file to the server
+        fs.writeFileSync(filePath, csv);
+
+        // Send the file for download
+        res.download(filePath, 'feedback.csv', (err) => {
+            if (err) {
+                console.error('Error sending the file:', err);
+                res.status(500).json({ message: 'Error downloading feedback CSV' });
+            }
+
+            // Remove the file after download to clean up the server
+            fs.unlinkSync(filePath);
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Error generating feedback CSV: ' + err.message });
+    }
+};
+
+
 module.exports = {
     provideFeedback,
     getAllFeedback,
     getFeedbackById,
     updateFeedback,
     deleteFeedback,
+    downloadFeedbackCSV
 };

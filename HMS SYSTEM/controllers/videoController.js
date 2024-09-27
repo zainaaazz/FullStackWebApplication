@@ -1,14 +1,17 @@
 const sql = require('mssql');
+const { BlobServiceClient, StorageSharedKeyCredential, generateBlobSASQueryParameters, BlobSASPermissions } = require('@azure/storage-blob'); // Make sure BlobSASPermissions is imported here
 const dbConfig = require('../config/dbConfig');
-const { BlobServiceClient, generateBlobSASQueryParameters, BlobSASPermissions } = require('@azure/storage-blob');
 const { v4: uuidv4 } = require('uuid');
-const { StorageSharedKeyCredential } = require('@azure/storage-blob');
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');  // File system module for temp file handling
+const path = require('path');  // For handling file paths
 
 const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
 const AZURE_STORAGE_ACCOUNT_NAME = process.env.AZURE_STORAGE_ACCOUNT_NAME;
 const AZURE_STORAGE_ACCOUNT_KEY = process.env.AZURE_STORAGE_ACCOUNT_KEY;
 
 const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
+
 
 // Function to generate a SAS token for a blob
 function generateSasToken(blobName) {
@@ -28,6 +31,34 @@ function generateSasToken(blobName) {
     return sasToken;
 }
 
+// Function to convert and compress video from the uploaded file
+const convertAndCompressVideo = (tempFilePath, outputPath) => {
+    return new Promise((resolve, reject) => {
+        ffmpeg(tempFilePath)
+            .inputOptions(['-probesize 100000000', '-analyzeduration 100000000'])
+            .outputOptions([
+                '-c:v libx264',
+                '-preset fast',
+                '-crf 28',
+                '-movflags +faststart',
+                '-pix_fmt yuv420p'
+            ])
+            .toFormat('mp4')
+            .on('stderr', (stderrLine) => {
+                console.error('FFmpeg stderr:', stderrLine);
+            })
+            .on('error', (err) => {
+                console.error('FFmpeg error:', err.message);
+                reject(new Error('Error processing video: ' + err.message));
+            })
+            .on('end', () => {
+                console.log('Video processing finished successfully');
+                resolve(outputPath);
+            })
+            .save(outputPath);  // Save the processed file
+    });
+};
+
 // Function to upload a video to Azure Blob and save the URL (with SAS) to the database
 const uploadVideo = async (req, res) => {
     const { videoTitle } = req.body;
@@ -38,23 +69,31 @@ const uploadVideo = async (req, res) => {
     }
 
     try {
-        // Step 1: Upload the video to Azure Blob Storage
+        // Step 1: Save the uploaded buffer to a temp file for processing
+        const tempFilePath = `./temp/${Date.now()}-${videoFile.originalname}`;
+        fs.writeFileSync(tempFilePath, videoFile.buffer);
+
+        // Step 2: Use the convertAndCompressVideo function to process the video
+        const outputFilePath = `./temp/output_${Date.now()}.mp4`;
+        await convertAndCompressVideo(tempFilePath, outputFilePath);
+
+        // Step 3: Upload the processed video to Azure Blob Storage
         const containerClient = blobServiceClient.getContainerClient('videos');
-        const blobName = uuidv4() + '-' + videoFile.originalname;  // Generate unique blob name
+        const blobName = uuidv4() + '-output.mp4';  // Generate unique blob name
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-        // Upload the video file to Azure Blob Storage
-        await blockBlobClient.uploadData(videoFile.buffer, {
-            blobHTTPHeaders: { blobContentType: videoFile.mimetype }
+        const videoStream = fs.createReadStream(outputFilePath);
+        await blockBlobClient.uploadStream(videoStream, undefined, undefined, {
+            blobHTTPHeaders: { blobContentType: 'video/mp4' }
         });
 
-        // Step 2: Generate SAS token for the uploaded blob
+        // Step 4: Generate SAS token for the uploaded blob
         const sasToken = generateSasToken(blobName);
 
-        // Step 3: Combine the blob URL with the SAS token to create the accessible URL
+        // Step 5: Combine the blob URL with the SAS token to create the accessible URL
         const videoUrl = `${blockBlobClient.url}?${sasToken}`;
 
-        // Step 4: Save the video details (VideoTitle and VideoURL) to the database
+        // Step 6: Save the video details (VideoTitle and VideoURL) to the database
         const pool = await sql.connect(dbConfig);
         const insertVideo = await pool.request()
             .input('VideoTitle', sql.NVarChar(255), videoTitle)
@@ -63,7 +102,11 @@ const uploadVideo = async (req, res) => {
 
         const newVideoID = insertVideo.recordset[0].VideoID;
 
-        // Step 5: Respond with the video details
+        // Step 7: Clean up the temporary files
+        fs.unlinkSync(tempFilePath);
+        fs.unlinkSync(outputFilePath);
+
+        // Step 8: Respond with the video details
         res.status(201).json({ message: 'Video uploaded successfully', videoId: newVideoID, videoUrl });
     } catch (err) {
         console.error('Error uploading video:', err);
