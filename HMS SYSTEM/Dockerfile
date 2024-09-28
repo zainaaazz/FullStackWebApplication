@@ -2,7 +2,7 @@
 FROM node:18
 
 # Install FFmpeg
-RUN apk add --no-cache ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg && apt-get clean
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
