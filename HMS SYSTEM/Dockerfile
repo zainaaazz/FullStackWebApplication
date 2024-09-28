@@ -11,10 +11,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm install --production
-
-# Optionally, prune unnecessary dependencies
-RUN npm prune --production
+RUN npm install
 
 # Copy the rest of the application code, including .env
 COPY . .
