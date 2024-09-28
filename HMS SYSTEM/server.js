@@ -1,28 +1,36 @@
 const express = require('express');
 const { swaggerUi, swaggerDocs } = require('./swaggerConfig');
 const userRoutes = require('./routes/userRoutes');
-const courseRoutes = require('./routes/courseRoutes');  // Ensure courseRoutes is registered
+const courseRoutes = require('./routes/courseRoutes');
 const moduleRoutes = require('./routes/moduleRoutes');
 const assignmentRoutes = require('./routes/assignmentRoutes');
-const videoRoutes = require('./routes/videoRoutes');  // Video routes
+const videoRoutes = require('./routes/videoRoutes');
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const submissionRoutes = require('./routes/submissionRoutes');
 const authRoutes = require('./routes/authRoutes');
 const utilityRoutes = require('./routes/utilityRoutes');
-
+const cors = require('cors');
 
 const app = express();
+
+// Enable CORS
+app.use(cors());
 
 // Middleware to parse JSON requests
 app.use(express.json());
 
+// Define a root route
+app.get('/', (req, res) => {
+    res.send('Welcome to the HMS API. Please access the API documentation at /api-docs');
+});
+
 // Register routes
 app.use('/users', userRoutes);
-app.use('/courses', courseRoutes);  // Register the /courses route
+app.use('/courses', courseRoutes);
 app.use('/modules', moduleRoutes);
 app.use('/assignments', assignmentRoutes);
-app.use('/videos', videoRoutes);  // Register /videos route
+app.use('/videos', videoRoutes);
 app.use('/enrollments', enrollmentRoutes);
 app.use('/feedbacks', feedbackRoutes);
 app.use('/submissions', submissionRoutes);
