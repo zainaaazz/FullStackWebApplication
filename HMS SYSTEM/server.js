@@ -20,9 +20,14 @@ app.use(cors());
 // Middleware to parse JSON requests
 app.use(express.json());
 
-// Define a root route
+// Redirect root to Swagger UI
 app.get('/', (req, res) => {
-    res.send('Welcome to the HMS API. Please access the API documentation at /api-docs');
+    res.redirect('/api-docs');
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'UP' });
 });
 
 // Register routes
