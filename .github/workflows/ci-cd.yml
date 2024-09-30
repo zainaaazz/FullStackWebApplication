@@ -28,7 +28,7 @@ jobs:
           context: ./HMS SYSTEM  # Set the context to the folder containing your Dockerfile
           file: ./HMS SYSTEM/Dockerfile  # the path to Dockerfile
           push: true
-          tags: 37833707/cmpg323:latest  # Docker Hub username
+          tags: 37833707/webapp:latest  # Docker Hub username
 
   deploy:
     runs-on: ubuntu-latest
@@ -40,4 +40,4 @@ jobs:
         with:
           app-name: HMSSYSTEM
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          images: 37833707/cmpg323:latest
+          images: 37833707/webapp3:latest
