@@ -11,11 +11,11 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: 'https://nwu-hms-g6fjckard7fggqar.southafricanorth-01.azurewebsites.net', // Update to your Azure URL
-                description: 'Production server', // Update description if needed
+                url: 'hmssystem.azurewebsites.nett', //Azure URL
+                description: 'Production server', //
             },
             {
-                url: 'http://localhost:3000', // Keep for local development
+                url: 'http://localhost:3000', // local development
                 description: 'Local server',
             },
         ],
