@@ -1,0 +1,195 @@
+/* General layout and structure */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: #fff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.App {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Header Styling */
+.header {
+  background-color: #333;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.nwu-logo {
+  height: 50px;
+  margin-right: 15px;
+}
+
+.header h1 {
+  font-size: 2rem;
+  color: #60449c; /* NWU Purple */
+}
+
+/* Central Authentication Block */
+.login-container {
+  text-align: center;
+  color: white;
+  margin: 20px auto;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #60449c; /* NWU branding color */
+  margin-bottom: 20px;
+}
+
+.heading{
+  color: #60449c; /* NWU branding color */
+  margin-bottom: 0px;
+}
+
+.login-box {
+  background-color: #333;
+  border: 3px solid #60449c;
+  padding: 40px;
+  width: 400px; /* Increased width */
+  border-radius: 10px;
+}
+
+h2 {
+  font-size: 1.5rem; /* Increased font size */
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem; /* Increased input font size */
+  border-radius: 5px;
+  border: 2px solid #60449c;
+  outline: none;
+}
+
+.password-container {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 10px;
+}
+
+.login-button,
+.clear-button {
+  background-color: #60449c;
+  color: white;
+  border: none;
+  padding: 15px;
+  margin-top: 15px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  border-radius: 5px;
+}
+
+.clear-button {
+  background-color: #444;
+}
+
+.login-button:hover,
+.clear-button:hover {
+  opacity: 0.8;
+}
+
+/* Security message */
+.security-message,
+.disclaimer {
+  font-size: 0.9rem;
+  margin-top: 25px;
+}
+
+.disclaimer {
+  margin-top: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-box {
+    width: 90%;
+    padding: 30px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  input {
+    font-size: 1rem;
+  }
+
+  .login-button,
+  .clear-button {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-box {
+    width: 100%;
+    padding: 25px;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  input {
+    font-size: 0.9rem;
+  }
+
+  .login-button,
+  .clear-button {
+    font-size: 0.9rem;
+  }
+}
