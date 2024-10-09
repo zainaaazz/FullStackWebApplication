@@ -1,51 +1,85 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './LoginForm.css';
 
 const LoginForm = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [UserNumber, setUserNumber] = useState('');
+  const [Password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate(); // Hook for navigation
+  const [loginError, setLoginError] = useState('');
+  const [loginSuccess, setLoginSuccess] = useState(''); // State to track login success
+
+  const navigate = useNavigate(); // Initialize navigate
 
   const validateForm = () => {
     let formErrors = {};
 
-    if (!username.trim()) {
-      formErrors.username = 'Username is required';
+    if (!UserNumber.trim()) {
+      formErrors.UserNumber = 'User Number is required';
     }
 
-    if (!password.trim()) {
-      formErrors.password = 'Password is required';
+    if (!Password.trim()) {
+      formErrors.Password = 'Password is required';
     }
 
     return formErrors;
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
-      // If validation passes, navigate to the assignments page
-      navigate('/assignments');
+      try {
+        const response = await fetch('https://hmsnwu.azurewebsites.net/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            UserNumber: parseInt(UserNumber), // Assuming UserNumber is an integer
+            Password,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Login failed. Please check your credentials.');
+        }
+
+        const data = await response.json();
+        const token = data.token; // Assuming the token is returned as "token"
+
+        // Store the JWT token in localStorage or sessionStorage
+        localStorage.setItem('jwtToken', token);
+
+        // Set login success message
+        setLoginSuccess('Login successful!');
+
+        // Clear any previous login error
+        setLoginError('');
+
+        // Redirect to the assignments page after successful login
+        navigate('/assignments'); // Redirect user to assignments page
+
+      } catch (error) {
+        setLoginError(error.message);
+        setLoginSuccess(''); // Clear success message if there's an error
+      }
     } else {
       setErrors(formErrors);
     }
   };
 
   const clearForm = () => {
-    setUsername('');
+    setUserNumber('');
     setPassword('');
     setErrors({});
+    setLoginError('');
+    setLoginSuccess(''); // Clear success message when form is cleared
   };
 
   return (
     <div className="login-container">
-       <header className="header">
-        <img src={require('../assets/image.png')} alt="NWU Logo" className="nwu-logo" />
-        <h1 className="heading">HMS Lecturer Portal</h1>
-      </header>
       <div className="center-section">
         <h2>Central Authentication Service</h2>
       </div>
@@ -53,23 +87,23 @@ const LoginForm = () => {
         <div className="left-section">
           <form onSubmit={handleLogin}>
             <div className="form-group">
-              <label htmlFor="username">Username:</label>
+              <label htmlFor="UserNumber">User Number:</label>
               <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your username"
+                type="Number"
+                id="UserNumber"
+                value={UserNumber}
+                onChange={(e) => setUserNumber(e.target.value)}
+                placeholder="Enter your UserNumber"
               />
-              {errors.username && <p className="error-message">{errors.username}</p>}
+              {errors.UserNumber && <p className="error-message">{errors.UserNumber}</p>}
             </div>
             <div className="form-group">
-              <label htmlFor="password">Password:</label>
-              <div className="password-container">
+              <label htmlFor="Password">Password:</label>
+              <div className="Password-container">
                 <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  value={password}
+                  type={showPassword ? 'text' : 'Password'}
+                  id="Password"
+                  value={Password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                 />
@@ -81,8 +115,10 @@ const LoginForm = () => {
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
               </div>
-              {errors.password && <p className="error-message">{errors.password}</p>}
+              {errors.Password && <p className="error-message">{errors.Password}</p>}
             </div>
+            {loginError && <p className="error-message">{loginError}</p>}
+            {loginSuccess && <p className="success-message">{loginSuccess}</p>} {/* Success message */}
             <button type="submit" className="login-button">
               LOGIN
             </button>
@@ -97,12 +133,6 @@ const LoginForm = () => {
           </p>
           <p className="disclaimer">
             You are about to log into the NWU private network. You confirm that you have read and that you understand the NWU policy, rules, and regulations as published.
-          </p>
-          <p className="disclaimer">
-            <a href="https://www.nwu.ac.za/gov_man/policy/index.html" target="_blank">GOVERNANCE AND MANAGEMENT: Policies & Rules</a>
-         </p>
-          <p className="disclaimer">
-            <a href="https://services.nwu.ac.za/information-technology/policy-rules-and-guidelines-responsible-use-it" target="_blank">NWU IT RESPONSIBLE USAGE: Policy, Rules and Guidelines</a>
           </p>
         </div>
       </div>
