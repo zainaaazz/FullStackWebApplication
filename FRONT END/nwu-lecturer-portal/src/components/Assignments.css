@@ -1,0 +1,139 @@
+/* General layout and structure */
+.assignments-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #222;
+    color: white;
+  }
+  
+  /* Header styling */
+  .header {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    padding: 10px;
+  }
+
+ /* General Header Styling */
+.headerModules {
+    display: flex;
+    align-items: center;
+    background-color: #222;
+    padding: 10px;
+    gap: 10px; /* Space between tabs */
+    margin-top: 10px;
+    margin-bottom:10px;
+  }
+  
+  /* Individual Module Tab */
+  .module-tab {
+    display: flex;
+    align-items: center;
+    background-color: #444; /* Default tab background */
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .module-tab.active {
+    background-color: #60449c; /* Active tab color (purple) */
+  }
+  
+  .module-tab:hover {
+    background-color: #555; /* Hover color */
+  }
+  
+  .module-tab .icon {
+    margin-right: 5px;
+  }
+  
+  .module-tab .dropdown {
+    margin-left: 5px;
+    font-size: 0.8rem;
+  }
+  
+  /* Responsive Flexbox for Overflow */
+  .headerModules {
+    flex-wrap: wrap;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  
+  .nwu-logo {
+    height: 60px;
+    margin-right: 20px;
+  }
+  
+  .header h1 {
+    font-size: 1.8rem;
+    color: #60449c;
+  }
+  
+  /* Content area */
+  .content {
+    display: flex;
+    flex-grow: 1;
+  }
+  
+  /* Sidebar styling */
+  .sidebar {
+    background-color: #444;
+    width: 250px;
+    padding: 20px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    padding: 10px 0;
+    cursor: pointer;
+  }
+  
+  .sidebar li.active {
+    background-color: #60449c;
+    padding-left: 10px;
+  }
+  
+  /* Main content styling */
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+  }
+  
+  .main-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  table th, table td {
+    border: 1px solid #555;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  table th {
+    background-color: #666;
+  }
+  
+  table td a {
+    color: #60449c;
+    text-decoration: none;
+  }
+  
+  table td a:hover {
+    text-decoration: underline;
+  }
+  

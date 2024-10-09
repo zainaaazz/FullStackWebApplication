@@ -1,16 +1,20 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Import React Router components
 import './App.css';
 import LoginForm from './components/LoginForm';
+import Assignments from './components/Assignments'; // Import the Assignments page
 
 function App() {
   return (
-    <div className="App">
-      <header className="header">
-        <img src={require('./assets/NWU-WhiteLogo.png')} alt="NWU Logo" className="nwu-logo" />
-        <h1 className="heading">Lecturer Portal</h1>
-      </header>
-      <LoginForm />
-    </div>
+    <Router>
+      <div className="App">
+       
+        <Routes>
+          <Route path="/" element={<LoginForm />} /> {/* Route for the login form */}
+          <Route path="/assignments" element={<Assignments />} /> {/* Route for the assignments page */}
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

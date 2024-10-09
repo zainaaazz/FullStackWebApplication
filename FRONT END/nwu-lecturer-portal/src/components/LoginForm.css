@@ -10,6 +10,13 @@ h1 {
   margin-bottom: 20px;
 }
 
+a {
+  color: #60449c;
+  text-decoration: underline;
+}
+
+
+
 .login-box {
   display: flex;
   justify-content: space-between;
@@ -37,7 +44,8 @@ h1 {
 
 h2 {
   font-size: 1.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 .form-group {
@@ -168,4 +176,6 @@ input {
   .clear-button {
     font-size: 0.9rem;
   }
+
+  
 }

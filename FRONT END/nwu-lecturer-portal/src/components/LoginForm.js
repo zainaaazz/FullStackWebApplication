@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 import './LoginForm.css';
 
 const LoginForm = () => {
@@ -6,6 +7,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate(); // Hook for navigation
 
   const validateForm = () => {
     let formErrors = {};
@@ -25,7 +27,8 @@ const LoginForm = () => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
-      console.log('Logging in with:', { username, password });
+      // If validation passes, navigate to the assignments page
+      navigate('/assignments');
     } else {
       setErrors(formErrors);
     }
@@ -39,13 +42,15 @@ const LoginForm = () => {
 
   return (
     <div className="login-container">
+       <header className="header">
+        <img src={require('../assets/image.png')} alt="NWU Logo" className="nwu-logo" />
+        <h1 className="heading">HMS Lecturer Portal</h1>
+      </header>
       <div className="center-section">
         <h2>Central Authentication Service</h2>
       </div>
       <div className="login-box">
-  
         <div className="left-section">
-         
           <form onSubmit={handleLogin}>
             <div className="form-group">
               <label htmlFor="username">Username:</label>
@@ -92,6 +97,12 @@ const LoginForm = () => {
           </p>
           <p className="disclaimer">
             You are about to log into the NWU private network. You confirm that you have read and that you understand the NWU policy, rules, and regulations as published.
+          </p>
+          <p className="disclaimer">
+            <a href="https://www.nwu.ac.za/gov_man/policy/index.html" target="_blank">GOVERNANCE AND MANAGEMENT: Policies & Rules</a>
+         </p>
+          <p className="disclaimer">
+            <a href="https://services.nwu.ac.za/information-technology/policy-rules-and-guidelines-responsible-use-it" target="_blank">NWU IT RESPONSIBLE USAGE: Policy, Rules and Guidelines</a>
           </p>
         </div>
       </div>
