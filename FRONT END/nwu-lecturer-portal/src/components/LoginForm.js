@@ -1,85 +1,83 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import axios from 'axios'; // Import axios for API calls
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook for navigation
 import './LoginForm.css';
 
 const LoginForm = () => {
-  const [UserNumber, setUserNumber] = useState('');
-  const [Password, setPassword] = useState('');
+  const [userNumber, setUserNumber] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const [loginError, setLoginError] = useState('');
-  const [loginSuccess, setLoginSuccess] = useState(''); // State to track login success
+  const [errorMessage, setErrorMessage] = useState(''); // Error message from server
+  const navigate = useNavigate(); // Hook for navigation
 
-  const navigate = useNavigate(); // Initialize navigate
-
+  // Form validation
   const validateForm = () => {
     let formErrors = {};
 
-    if (!UserNumber.trim()) {
-      formErrors.UserNumber = 'User Number is required';
+    // Validate UserNumber (must be a valid number and not empty)
+    if (!userNumber.trim() || isNaN(userNumber)) {
+      formErrors.userNumber = 'Valid User Number is required';
     }
 
-    if (!Password.trim()) {
-      formErrors.Password = 'Password is required';
+    // Validate Password (must not be empty)
+    if (!password.trim()) {
+      formErrors.password = 'Password is required';
     }
 
     return formErrors;
   };
 
+  // Login handler
   const handleLogin = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
+    setErrorMessage(''); // Clear previous error message
+
     if (Object.keys(formErrors).length === 0) {
       try {
-        const response = await fetch('https://hmsnwu.azurewebsites.net/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            UserNumber: parseInt(UserNumber), // Assuming UserNumber is an integer
-            Password,
-          }),
+        // Send login request to the backend
+        const response = await axios.post('https://hmsnwu.azurewebsites.net/auth/login', {
+          UserNumber: parseInt(userNumber, 10), // Send UserNumber as an integer
+          Password: password, // Send password
         });
 
-        if (!response.ok) {
-          throw new Error('Login failed. Please check your credentials.');
+        // If the response contains a token, store it in localStorage and navigate
+        if (response.data && response.data.accessToken) {
+          localStorage.setItem('token', response.data.accessToken); // Store the token
+          alert('Login successful');
+          navigate('/assignments'); // Navigate to the assignments page
+        } else {
+          setErrorMessage('Invalid credentials. Please try again.');
         }
-
-        const data = await response.json();
-        const token = data.token; // Assuming the token is returned as "token"
-
-        // Store the JWT token in localStorage or sessionStorage
-        localStorage.setItem('jwtToken', token);
-
-        // Set login success message
-        setLoginSuccess('Login successful!');
-
-        // Clear any previous login error
-        setLoginError('');
-
-        // Redirect to the assignments page after successful login
-        navigate('/assignments'); // Redirect user to assignments page
-
       } catch (error) {
-        setLoginError(error.message);
-        setLoginSuccess(''); // Clear success message if there's an error
+        if (error.response) {
+          setErrorMessage(`Error: ${error.response.data.message || 'Invalid credentials. Please try again.'}`);
+          console.error('Login error:', error.response.data);
+        } else {
+          setErrorMessage('Network error. Please check your connection.');
+          console.error('Login error:', error);
+        }
       }
     } else {
-      setErrors(formErrors);
+      setErrors(formErrors); // Set validation errors if they exist
     }
   };
 
+  // Clear form handler
   const clearForm = () => {
     setUserNumber('');
     setPassword('');
     setErrors({});
-    setLoginError('');
-    setLoginSuccess(''); // Clear success message when form is cleared
+    setErrorMessage(''); // Clear error messages
   };
 
   return (
     <div className="login-container">
+      <header className="header">
+        <img src={require('../assets/image.png')} alt="NWU Logo" className="nwu-logo" />
+        <h1 className="heading">HMS Lecturer Portal</h1>
+      </header>
       <div className="center-section">
         <h2>Central Authentication Service</h2>
       </div>
@@ -87,23 +85,23 @@ const LoginForm = () => {
         <div className="left-section">
           <form onSubmit={handleLogin}>
             <div className="form-group">
-              <label htmlFor="UserNumber">User Number:</label>
+              <label htmlFor="userNumber">User Number:</label>
               <input
-                type="Number"
-                id="UserNumber"
-                value={UserNumber}
+                type="text"
+                id="userNumber"
+                value={userNumber}
                 onChange={(e) => setUserNumber(e.target.value)}
-                placeholder="Enter your UserNumber"
+                placeholder="Enter your User Number"
               />
-              {errors.UserNumber && <p className="error-message">{errors.UserNumber}</p>}
+              {errors.userNumber && <p className="error-message">{errors.userNumber}</p>} {/* Display validation error */}
             </div>
             <div className="form-group">
-              <label htmlFor="Password">Password:</label>
-              <div className="Password-container">
+              <label htmlFor="password">Password:</label>
+              <div className="password-container">
                 <input
-                  type={showPassword ? 'text' : 'Password'}
-                  id="Password"
-                  value={Password}
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                 />
@@ -115,10 +113,9 @@ const LoginForm = () => {
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
               </div>
-              {errors.Password && <p className="error-message">{errors.Password}</p>}
+              {errors.password && <p className="error-message">{errors.password}</p>} {/* Display validation error */}
             </div>
-            {loginError && <p className="error-message">{loginError}</p>}
-            {loginSuccess && <p className="success-message">{loginSuccess}</p>} {/* Success message */}
+            {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display server error */}
             <button type="submit" className="login-button">
               LOGIN
             </button>
@@ -133,6 +130,12 @@ const LoginForm = () => {
           </p>
           <p className="disclaimer">
             You are about to log into the NWU private network. You confirm that you have read and that you understand the NWU policy, rules, and regulations as published.
+          </p>
+          <p className="disclaimer">
+            <a href="https://www.nwu.ac.za/gov_man/policy/index.html" target="_blank">GOVERNANCE AND MANAGEMENT: Policies & Rules</a>
+         </p>
+          <p className="disclaimer">
+            <a href="https://services.nwu.ac.za/information-technology/policy-rules-and-guidelines-responsible-use-it" target="_blank">NWU IT RESPONSIBLE USAGE: Policy, Rules and Guidelines</a>
           </p>
         </div>
       </div>
