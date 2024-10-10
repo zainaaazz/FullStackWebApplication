@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Im
 import './App.css';
 import LoginForm from './components/LoginForm';
 import Assignments from './components/Assignments'; // Import the Assignments page
+import CreateAssignment from './components/CreateAssignment';
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
        
         <Routes>
           <Route path="/" element={<LoginForm />} /> {/* Route for the login form */}
-          <Route path="/assignments" element={<Assignments />} /> {/* Route for the assignments page */}
+          <Route path="/assignments" element={<Assignments />} /> 
+          <Route path="/create-assignment" element={<CreateAssignment />} />
+          {/* Other routes can be added here */}
         </Routes>
       </div>
     </Router>
