@@ -1,0 +1,129 @@
+.create-assignment-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #333; /* Change background color for better contrast */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: white; /* Text color to white */
+  }
+  
+  h2 {
+    text-align: center;
+    color: #60449c; /* Title color */
+  }
+  
+  .module-selection {
+    margin: 20px 0;
+  }
+  
+  .modules-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .module-tab {
+    padding: 10px 15px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: #444; /* Dark background for the module tab */
+    color: white; /* White text color */
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  
+  .module-tab.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+  }
+  
+  .module-tab:hover {
+    background-color: #555; /* Hover background color */
+  }
+  
+  .module-tab .icon {
+    margin-right: 5px;
+    color: white; /* Icon color to white */
+  }
+  
+  .selected-module-info {
+    margin: 10px 0;
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  .form-group {
+    margin: 15px 0;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555; /* Change to a lighter grey for labels */
+  }
+  
+  input[type='text'],
+  input[type='date'],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555; /* Dark border for input fields */
+    border-radius: 5px;
+    background-color: #222; /* Dark background for inputs */
+    color: white; /* White text color */
+  }
+  
+  input[type='text']:focus,
+  input[type='date']:focus,
+  textarea:focus {
+    border-color: #007bff; /* Focus border color */
+  }
+  
+  textarea {
+    height: 100px;
+    resize: none;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    margin-top: 10px;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  .error-message {
+    color: red;
+    text-align: center;
+  }
+  
+  .message-box {
+    margin: 10px 0;
+  }
+  
