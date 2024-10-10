@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode'; // Import jwt-decode
+import { jwtDecode } from 'jwt-decode'; // Import jwt-decode
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 import './Assignments.css';
 
 const Assignments = () => {
+  const navigate = useNavigate(); // Hook for navigation
   const [activeModuleId, setActiveModuleId] = useState(null); // Default active module ID
   const [assignments, setAssignments] = useState([]); // State to store all assignments
   const [filteredAssignments, setFilteredAssignments] = useState([]); // State to store filtered assignments
@@ -102,7 +104,12 @@ const Assignments = () => {
             <li>Announcements</li>
             <li>Resources</li>
             <li className="active">Assignments</li>
-            <li>Tests & Quizzes</li>
+            <li 
+              onClick={() => navigate('/create-assignment')} // Navigate to create assignment page
+              className="clickable" // Add a class for styling (optional)
+            >
+              Create New Assignment
+            </li>
             <li>Statistics</li>
             <li>Site Info</li>
             <li>Contact Us</li>
