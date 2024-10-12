@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';  
+import React, { useState, useEffect } from 'react';   
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; 
 import { jwtDecode } from 'jwt-decode'; // Corrected import
@@ -253,31 +253,29 @@ const ListAssignmentVideo = () => {
             <>
               {filteredSubmissions.length > 0 ? (
                 <>
-                  <h2>Submissions for Assignment {activeAssignmentId}</h2>
-                  <button className="back-button" onClick={handleBackClick}>Back</button>
+                  <h2>Submissions for Assignment {assignmentTitles[activeAssignmentId]}</h2>
+                  <button className="btn btn-secondary" onClick={handleBackClick}>
+                    Back to Assignments
+                  </button>
                   <table>
                     <thead>
                       <tr>
-                        <th>Video ID</th>
-                        <th>Assignment ID</th>
-                        <th>Status</th>
-                        <th>Assignment Title</th> {/* Updated to Assignment Title */}
-                        <th>Video Link</th>
+                        <th>Submission ID</th>
+                        <th>Assignment Title</th> {/* New column for Assignment Title */}
+                        <th>Video Title</th> {/* New column for Video Title */}
+                        <th>Video URL</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredSubmissions.map(submission => (
-                        <tr key={submission.VideoID}>
-                          <td>{submission.VideoID}</td>
-                          <td>{submission.AssignmentID}</td>
-                          <td>{submission.Status}</td>
+                        <tr key={submission.SubmissionID}>
+                          <td>{submission.SubmissionID}</td>
+                          <td>{assignmentTitles[submission.AssignmentID] || 'N/A'}</td> {/* Display Assignment Title */}
+                          <td>{videoDetails[submission.VideoID]?.VideoTitle || 'N/A'}</td> {/* Display Video Title */}
                           <td>
-                            {assignmentTitles[submission.AssignmentID]} {/* Display assignment title */}
-                          </td>
-                          <td>
-                           <a href={videoDetails[submission.VideoID]?.VideoURL || '#'} target="_blank" rel="noopener noreferrer">
-                          {videoDetails[submission.VideoID]?.VideoURL || 'No URL available'}
-                            </a>
+                            <a href={videoDetails[submission.VideoID]?.VideoURL || '#'} target="_blank" rel="noopener noreferrer">
+                           {videoDetails[submission.VideoID]?.VideoURL || 'No URL available'}
+                           </a>
                           </td>
                         </tr>
                       ))}
@@ -285,7 +283,7 @@ const ListAssignmentVideo = () => {
                   </table>
                 </>
               ) : (
-                <p>No submissions found for this assignment.</p>
+                <p>No submissions for this assignment.</p>
               )}
             </>
           )}
