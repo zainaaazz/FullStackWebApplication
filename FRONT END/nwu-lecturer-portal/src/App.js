@@ -4,6 +4,8 @@ import './App.css';
 import LoginForm from './components/LoginForm';
 import Assignments from './components/Assignments'; // Import the Assignments page
 import CreateAssignment from './components/CreateAssignment';
+import ListAssignmentVideo from './components/ListAssignmentVideo';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
@@ -11,9 +13,11 @@ function App() {
       <div className="App">
        
         <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/" element={<LoginForm />} /> {/* Route for the login form */}
           <Route path="/assignments" element={<Assignments />} /> 
           <Route path="/create-assignment" element={<CreateAssignment />} />
+          <Route path="/list-assignment-video" element={<ListAssignmentVideo/>} />
           {/* Other routes can be added here */}
         </Routes>
       </div>

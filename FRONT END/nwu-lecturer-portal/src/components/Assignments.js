@@ -99,10 +99,13 @@ const Assignments = () => {
       <div className="content">
         <div className="sidebar">
           <ul>
-            <li>Overview</li>
-            <li>Lessons</li>
-            <li>Announcements</li>
-            <li>Resources</li>
+            <li className="active">Pages</li>
+            <li 
+              onClick={() => navigate('/dashboard')} // Navigate to create assignment page
+              className="clickable" // Add a class for styling (optional)
+            >
+                  Home
+            </li>
             <li className="active">Assignments</li>
             <li 
               onClick={() => navigate('/create-assignment')} // Navigate to create assignment page
@@ -110,11 +113,12 @@ const Assignments = () => {
             >
               Create New Assignment
             </li>
-            <li>Statistics</li>
-            <li>Site Info</li>
-            <li>Contact Us</li>
-            <li>Gradebook</li>
-            <li>Help</li>
+             <li 
+               onClick={() => navigate('/list-assignment-video')} // Navigate to ListAssignmentVideo page
+               className="clickable" // Add a class for styling (optional)
+             >
+              List Video Submission
+            </li>
           </ul>
         </div>
 

@@ -46,7 +46,7 @@ const LoginForm = () => {
         if (response.data && response.data.accessToken) {
           localStorage.setItem('token', response.data.accessToken); // Store the token
           alert('Login successful');
-          navigate('/assignments'); // Navigate to the assignments page
+          navigate('/dashboard'); // Navigate to the assignments page
         } else {
           setErrorMessage('Invalid credentials. Please try again.');
         }
