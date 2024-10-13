@@ -6,6 +6,7 @@ import Assignments from './components/Assignments'; // Import the Assignments pa
 import CreateAssignment from './components/CreateAssignment';
 import ListAssignmentVideo from './components/ListAssignmentVideo';
 import Dashboard from './components/Dashboard';
+import UserAdmin from './components/UserAdmin';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/assignments" element={<Assignments />} /> 
           <Route path="/create-assignment" element={<CreateAssignment />} />
           <Route path="/list-assignment-video" element={<ListAssignmentVideo/>} />
+          <Route path="/user-admin" element={<UserAdmin />} /> 
           {/* Other routes can be added here */}
         </Routes>
       </div>

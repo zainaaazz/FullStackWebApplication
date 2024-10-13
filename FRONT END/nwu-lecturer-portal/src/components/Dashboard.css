@@ -1,179 +1,178 @@
 /* Dashboard Page Styles */
 .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-image: url('../assets/image.png'); /* NWU logo as background */
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 30%; /* Make the logo subtle */
-    color: #333;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  /* Header Styles */
-  .dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #60449c;
-    padding: 15px 30px;
-    color: white;
-  }
-  
-  .logo-section {
-    display: flex;
-    align-items: center;
-  }
-  
-  .nwu-logo {
-    height: 50px;
-    margin-right: 20px;
-  }
-  
-  .heading {
-    font-size: 1.8rem;
-    font-weight: 600;
-  }
-  
-  .nav-links ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .nav-links li {
-    margin-left: 20px;
-    cursor: pointer;
-    color: white;
-    font-size: 1rem;
-  }
-  
-  .nav-links li.active, .nav-links li:hover {
-    text-decoration: underline;
-  }
-  
-  /* Sidebar Styles */
-  .sidebar {
-    background-color: #444;
-    width: 250px;
-    padding: 20px;
-  }
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar li {
-    padding: 10px 0;
-    cursor: pointer;
-    color: white;
-    font-size: 1.1rem;
-  }
-  
-  .sidebar li.active, .sidebar li:hover {
-    background-color: #60449c;
-    padding-left: 10px;
-    font-weight: bold;
-  }
-  
-  /* Main Content Styles */
-  .dashboard-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 50px 20px;
-    background-color: rgba(255, 255, 255, 0.9); /* Add a light overlay to the background */
-    flex-grow: 1;
-  }
-  
-  .main-section {
-    text-align: center;
-    margin-bottom: 50px;
-  }
-  
-  .main-section h2 {
-    font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .intro-text {
-    font-size: 1.2rem;
-    color: #444;
-    line-height: 1.8;
-    max-width: 700px;
-    margin: 0 auto 20px auto;
-  }
-  
-  .intro-text p {
-    margin-bottom: 15px;
-  }
-  
-  .cta-button {
-    padding: 12px 30px;
-    background-color: #60449c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  .cta-button:hover {
-    background-color: #7e61b0;
-  }
-  
-  /* Features Section */
-  .feature-section {
-    text-align: center;
-  }
-  
-  .feature-section h2 {
-    font-size: 2rem;
-    margin-bottom: 30px;
-  }
-  
-  .features {
-    display: flex;
-    justify-content: space-evenly;
-    width: 100%;
-  }
-  
-  .feature-box {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 250px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  
-  .feature-box h3 {
-    font-size: 1.2rem;
-    color: #60449c;
-    margin-bottom: 10px;
-  }
-  
-  .feature-box p {
-    font-size: 1rem;
-    color: #666;
-  }
-  
-  .feature-box:hover {
-    transform: translateY(-10px);
-  }
-  
-  /* Footer Styles */
-  .dashboard-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 20px;
-    font-size: 0.9rem;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-image: url('../assets/image.png'); /* NWU logo as background */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30%; /* Make the logo subtle */
+  color: #333;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Header Styles */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #60449c;
+  padding: 15px 30px;
+  color: white;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+}
+
+.nwu-logo {
+  height: 50px;
+  margin-right: 20px;
+}
+
+.heading {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.nav-links ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  margin-left: 20px;
+  cursor: pointer;
+  color: white;
+  font-size: 1rem;
+}
+
+.nav-links li.active, .nav-links li:hover {
+  text-decoration: underline;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  background-color: #444;
+  width: 250px;
+  padding: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px 0;
+  cursor: pointer;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.sidebar li.active, .sidebar li:hover {
+  background-color: #60449c;
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+/* Main Content Styles */
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 50px 20px;
+  background-color: rgba(255, 255, 255, 0.9); /* Add a light overlay to the background */
+  flex-grow: 1;
+}
+
+.main-section {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.main-section h2 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.intro-text {
+  font-size: 1.2rem;
+  color: #444;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto 20px auto;
+}
+
+.intro-text p {
+  margin-bottom: 15px;
+}
+
+.cta-button {
+  padding: 12px 30px;
+  background-color: #60449c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  background-color: #7e61b0;
+}
+
+/* Features Section */
+.feature-section {
+  text-align: center;
+}
+
+.feature-section h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.features {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.feature-box {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.feature-box h3 {
+  font-size: 1.2rem;
+  color: #60449c;
+  margin-bottom: 10px;
+}
+
+.feature-box p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.feature-box:hover {
+  transform: translateY(-10px);
+}
+
+/* Footer Styles */
+.dashboard-footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+}

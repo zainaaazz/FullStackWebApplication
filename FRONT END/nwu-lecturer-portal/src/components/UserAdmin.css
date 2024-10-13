@@ -1,0 +1,138 @@
+/* General layout and structure */
+.user-admin-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #222;
+    color: white;
+}
+
+/* Header styling */
+.header {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    padding: 10px;
+}
+
+.nwu-logo {
+    height: 60px;
+    margin-right: 20px;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    color: #60449c;
+}
+
+/* User Admin specific styles */
+.user-admin-container {
+  padding: 15px; /* Reduced padding for the container */
+}
+
+.admin-layout {
+  display: flex;
+  gap: 15px; /* Reduced spacing between the sections */
+}
+
+.admin-form-section {
+  flex: 1; /* Allow the form section to take equal space */
+  max-width: 250px; /* Reduced max width for the form section */
+}
+
+.admin-table-section {
+  flex: 2; /* Allow the table section to take more space */
+  overflow-x: auto; /* Add horizontal scroll if needed */
+  margin-top: 15px; /* Lower the table section a bit */
+}
+
+.user-admin-section {
+  margin-bottom: 15px; /* Reduced margin bottom for sections */
+  padding: 12px; /* Reduced padding for sections */
+  border: 1px solid #ccc; /* Keep the border */
+  border-radius: 5px; /* Round the corners */
+  background-color: #f9f9f9; /* Light background for sections */
+}
+
+h2 {
+  font-size: 1.4rem; /* Slightly smaller font size */
+  margin-bottom: 8px; /* Reduced margin bottom */
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px; /* Reduced padding for inputs */
+  margin-bottom: 8px; /* Reduced margin bottom */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 8px; /* Reduced padding for buttons */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+table {
+  width: 85%; /* Reduced width of the table */
+  border-collapse: collapse;
+  margin-top: 15px; /* Add top margin to move the table down */
+}
+
+th,
+td {
+  padding: 8px; /* Reduced padding for table cells */
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+th {
+  background-color: #f2f2f2; /* Light grey for table headers */
+}
+
+.error-message {
+  color: red;
+}
+
+.container {
+  margin-top: 20px;
+}
+
+.card {
+  border: 1px solid #dee2e6;
+}
+
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}
+
+.user-table-section {
+  max-height: 600px; /* Adjust as needed */
+  overflow: auto; /* This allows scrolling if the content overflows */
+}
+
+.footer {
+  background-color: #333; /* Grey background */
+  color: blue; /* Purple text */
+  text-align: center;
+  padding: 10px 0;
+  position: relative; /* Allows for other layout styling */
+  bottom: 0; /* Fixes the footer at the bottom */
+  width: 100%; /* Full width */
+  margin-top: 20px; /* Space above the footer */
+}
+
+

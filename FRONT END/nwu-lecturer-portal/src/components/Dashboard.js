@@ -18,6 +18,7 @@ const Dashboard = () => {
             <li onClick={() => navigate('/assignments')}>Assignments</li>
             <li onClick={() => navigate('/create-assignment')}>Create Assignment</li>
             <li onClick={() => navigate('/list-assignment-video')}>List Assignment Video</li>
+            <li onClick={() => navigate('/user-admin')}>User Administration</li> {/* Added User Admin link */}
             <li>Site Info</li>
             <li>Contact Us</li>
           </ul>
@@ -57,6 +58,10 @@ const Dashboard = () => {
             <div className="feature-box" onClick={() => navigate('/assignments')}>
               <h3>View Assignments</h3>
               <p>Check the assignments you have created and monitor their status.</p>
+            </div>
+            <div className="feature-box" onClick={() => navigate('/user-admin')}> {/* Added User Admin box */}
+              <h3>User Administration</h3>
+              <p>Manage user roles and access control for the portal.</p>
             </div>
           </div>
         </div>

@@ -270,12 +270,12 @@ const ListAssignmentVideo = () => {
                       {filteredSubmissions.map(submission => (
                         <tr key={submission.SubmissionID}>
                           <td>{submission.SubmissionID}</td>
-                          <td>{assignmentTitles[submission.AssignmentID] || 'N/A'}</td> {/* Display Assignment Title */}
-                          <td>{videoDetails[submission.VideoID]?.VideoTitle || 'N/A'}</td> {/* Display Video Title */}
+                          <td>{assignmentTitles[submission.AssignmentID] || 'N/A'}</td>
+                          <td>{videoDetails[submission.VideoID]?.VideoTitle || 'N/A'}</td>
                           <td>
                             <a href={videoDetails[submission.VideoID]?.VideoURL || '#'} target="_blank" rel="noopener noreferrer">
-                           {videoDetails[submission.VideoID]?.VideoURL || 'No URL available'}
-                           </a>
+                              {videoDetails[submission.VideoID]?.VideoURL || 'No URL available'}
+                            </a>
                           </td>
                         </tr>
                       ))}
@@ -283,7 +283,12 @@ const ListAssignmentVideo = () => {
                   </table>
                 </>
               ) : (
-                <p>No submissions for this assignment.</p>
+                <div>
+                  <p>No submissions for this assignment.</p>
+                  <button className="btn btn-secondary" onClick={handleBackClick}>
+                    Back to Assignments
+                  </button>
+                </div>
               )}
             </>
           )}
