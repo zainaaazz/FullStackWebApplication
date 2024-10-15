@@ -47,12 +47,12 @@ const updateUser = async (req, res) => {
     }
 
     const { id } = req.params;
-    const { Username, FirstName, LastName, Email, UserRole, CourseID } = req.body;
+    const { UserNumber, FirstName, LastName, Email, UserRole, CourseID } = req.body;
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
             .input('UserID', sql.Int, id)
-            .input('Username', sql.VarChar, Username)
+            .input('UserNumber', sql.Int, UserNumber)
             .input('FirstName', sql.VarChar, FirstName)
             .input('LastName', sql.VarChar, LastName)
             .input('Email', sql.VarChar, Email)
@@ -60,7 +60,7 @@ const updateUser = async (req, res) => {
             .input('CourseID', sql.Int, CourseID)
             .query(`
                 UPDATE dbo.tblUser 
-                SET Username = @Username, 
+                SET UserNumber = @UserNumber, 
                     FirstName = @FirstName, 
                     LastName = @LastName, 
                     Email = @Email, 

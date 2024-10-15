@@ -21,8 +21,8 @@ module.exports = router;
  *     User:
  *       type: object
  *       properties:
- *         Username:
- *           type: string
+ *         UserNumber:
+ *           type: integer
  *           description: The assigned username for the user
  *         FirstName:
  *           type: string
@@ -101,8 +101,8 @@ module.exports = router;
  *           schema:
  *             type: object
  *             properties:
- *               Username:
- *                 type: string
+ *               UserNumber:
+ *                 type: integer
  *               FirstName:
  *                 type: string
  *               LastName:
@@ -114,7 +114,7 @@ module.exports = router;
  *               CourseID:
  *                 type: integer
  *             required:
- *               - Username
+ *               - UserNumber
  *               - FirstName
  *               - LastName
  *               - Email
