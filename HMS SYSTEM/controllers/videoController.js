@@ -18,13 +18,14 @@ function generateSasToken(blobName) {
     const sharedKeyCredential = new StorageSharedKeyCredential(AZURE_STORAGE_ACCOUNT_NAME, AZURE_STORAGE_ACCOUNT_KEY);
     const containerName = 'videos';  // Your container name
 
-    // Set token permissions and expiration
-    const sasOptions = {
-        containerName: containerName,
-        blobName: blobName,
-        expiresOn: new Date(new Date().valueOf() + 3600 * 1000),  // 1 hour expiration
-        permissions: BlobSASPermissions.parse("r"),  // Read permissions
-    };
+   // Set token permissions and expiration
+const sasOptions = {
+    containerName: containerName,
+    blobName: blobName,
+    expiresOn: new Date(new Date().valueOf() + 60 * 24 * 3600 * 1000),  // 2 months expiration
+    permissions: BlobSASPermissions.parse("r"),  // Read permissions
+};
+
 
     // Generate the SAS token
     const sasToken = generateBlobSASQueryParameters(sasOptions, sharedKeyCredential).toString();
