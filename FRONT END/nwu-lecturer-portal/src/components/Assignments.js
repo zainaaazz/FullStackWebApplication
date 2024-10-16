@@ -125,6 +125,13 @@ const Assignments = () => {
              >
               User Administration
             </li>
+              <li 
+               onClick={() => navigate('/watchVideo-Feedback')} // Navigate to ListAssignmentVideo page
+               className="clickable" // Add a class for styling (optional)
+             >
+              Watch Video & Provide Feedback
+                             
+            </li>
           </ul>
         </div>
 

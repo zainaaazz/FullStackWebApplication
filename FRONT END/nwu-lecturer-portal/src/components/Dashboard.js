@@ -5,6 +5,16 @@ import './Dashboard.css';
 const Dashboard = () => {
   const navigate = useNavigate();
 
+  // Logout function
+  const handleLogout = () => {
+  // Clear the token (or session) from local storage or session storage
+  localStorage.removeItem('authToken'); // Adjust based on how you're storing the token
+  sessionStorage.removeItem('authToken'); // In case you're using sessionStorage
+
+  // Redirect to login page
+  navigate('/');
+  };
+
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
@@ -18,9 +28,9 @@ const Dashboard = () => {
             <li onClick={() => navigate('/assignments')}>Assignments</li>
             <li onClick={() => navigate('/create-assignment')}>Create Assignment</li>
             <li onClick={() => navigate('/list-assignment-video')}>List Assignment Video</li>
-            <li onClick={() => navigate('/user-admin')}>User Administration</li> {/* Added User Admin link */}
-            <li>Site Info</li>
-            <li>Contact Us</li>
+            <li onClick={() => navigate('/user-admin')}>User Administration</li>
+            <li onClick={() => navigate('/watchVideo-Feedback')}>Watch Video Feedback</li>
+            <li onClick={handleLogout}>Logout</li> {/* Updated Logout to trigger the handleLogout function */}
           </ul>
         </nav>
       </header>
@@ -59,9 +69,13 @@ const Dashboard = () => {
               <h3>View Assignments</h3>
               <p>Check the assignments you have created and monitor their status.</p>
             </div>
-            <div className="feature-box" onClick={() => navigate('/user-admin')}> {/* Added User Admin box */}
+            <div className="feature-box" onClick={() => navigate('/user-admin')}>
               <h3>User Administration</h3>
               <p>Manage user roles and access control for the portal.</p>
+            </div>
+            <div className="feature-box" onClick={() => navigate('/watchVideo-Feedback')}> {/* Added Watch Video Feedback box */}
+              <h3>Watch Video & Provide Feedback</h3>
+              <p>This page allows a user to stream and/or download a video submission and provide a mark and commentary feedback.</p>
             </div>
           </div>
         </div>
