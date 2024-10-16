@@ -138,11 +138,56 @@ const downloadFeedbackCSV = async (req, res) => {
 };
 
 
+const downloadAssignmentFeedbackCSV = async (req, res) => {
+    const { assignmentId } = req.params; // Retrieve assignment ID from the route parameter
+    try {
+        const pool = await sql.connect(dbConfig);
+        const result = await pool.request()
+            .input('AssignmentID', sql.Int, assignmentId)
+            .query(`
+                SELECT f.SubmissionID, f.FeedbackText, f.Mark, f.Lecture_ID, s.AssignmentID
+                FROM dbo.tblFeedback f
+                JOIN dbo.tblSubmission s ON f.SubmissionID = s.SubmissionID
+                WHERE s.AssignmentID = @AssignmentID
+            `);
+
+        const feedbackData = result.recordset;
+
+        if (feedbackData.length === 0) {
+            return res.status(404).json({ message: 'No feedback data found for this assignment' });
+        }
+
+        // Convert JSON data to CSV
+        const json2csvParser = new Parser({ fields: ['SubmissionID', 'FeedbackText', 'Mark', 'Lecture_ID', 'AssignmentID'] });
+        const csv = json2csvParser.parse(feedbackData);
+
+        // Define the file path and name
+        const filePath = path.join(__dirname, '../temp', `feedback_assignment_${assignmentId}_${Date.now()}.csv`);
+        
+        // Save the CSV file to the server
+        fs.writeFileSync(filePath, csv);
+
+        // Send the file for download
+        res.download(filePath, `feedback_assignment_${assignmentId}.csv`, (err) => {
+            if (err) {
+                console.error('Error sending the file:', err);
+                res.status(500).json({ message: 'Error downloading feedback CSV' });
+            }
+
+            // Remove the file after download to clean up the server
+            fs.unlinkSync(filePath);
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Error generating feedback CSV: ' + err.message });
+    }
+};
+
 module.exports = {
     provideFeedback,
     getAllFeedback,
     getFeedbackById,
     updateFeedback,
     deleteFeedback,
-    downloadFeedbackCSV
+    downloadFeedbackCSV,
+    downloadAssignmentFeedbackCSV // Export the new function
 };

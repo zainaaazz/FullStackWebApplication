@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';   
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; 
-import { jwtDecode } from 'jwt-decode'; // Corrected import
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import './ListAssignmentVideo.css';
+
 
 const ListAssignmentVideo = () => {
   const navigate = useNavigate(); 
@@ -14,8 +15,11 @@ const ListAssignmentVideo = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [videoDetails, setVideoDetails] = useState({});
-  const [assignmentTitles, setAssignmentTitles] = useState({}); // New state for assignment titles
-  const [showAssignmentMessage, setShowAssignmentMessage] = useState(false); // State for showing assignment message
+  const [assignmentTitles, setAssignmentTitles] = useState({});
+  const [feedbackText, setFeedbackText] = useState(''); // State for feedback text
+  const [mark, setMark] = useState(''); // State for mark
+  const [lectureId, setLectureId] = useState(null); // For lecture ID
+  const [showAssignmentMessage, setShowAssignmentMessage] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,11 +30,12 @@ const ListAssignmentVideo = () => {
         const token = localStorage.getItem('token');
         if (!token) {
           setError('Unauthorized: No token found. Please login.');
-          return; // Prevent further execution if no token
+          return;
         }
 
         const decodedToken = jwtDecode(token);
         const userCourseID = decodedToken.CourseID;
+        setLectureId(decodedToken.LectureID); // Set the lecture ID
 
         const config = {
           headers: {
@@ -39,7 +44,6 @@ const ListAssignmentVideo = () => {
           },
         };
 
-        // Fetch modules for the user's course
         const modulesResponse = await axios.get('https://hmsnwu.azurewebsites.net/modules', config);
         if (Array.isArray(modulesResponse.data)) {
           const filteredModules = modulesResponse.data.filter(module => module.CourseID === userCourseID);
@@ -61,9 +65,9 @@ const ListAssignmentVideo = () => {
   useEffect(() => {
     if (activeModuleId) {
       fetchAssignments(activeModuleId);
-      setShowAssignmentMessage(true); // Show the message when a module is clicked
+      setShowAssignmentMessage(true);
     } else {
-      setShowAssignmentMessage(false); // Hide the message when no module is selected
+      setShowAssignmentMessage(false);
     }
   }, [activeModuleId]);
 
@@ -79,15 +83,12 @@ const ListAssignmentVideo = () => {
         },
       };
 
-      // Fetch assignments for the selected module
       const assignmentsResponse = await axios.get(`https://hmsnwu.azurewebsites.net/assignments/module/${moduleId}`, config);
       if (Array.isArray(assignmentsResponse.data)) {
         setAssignments(assignmentsResponse.data);
-        
-        // Store assignment titles in state
         const titles = {};
         assignmentsResponse.data.forEach(assignment => {
-          titles[assignment.AssignmentID] = assignment.Title; // Map assignment ID to title
+          titles[assignment.AssignmentID] = assignment.Title;
         });
         setAssignmentTitles(titles);
       } else {
@@ -104,7 +105,7 @@ const ListAssignmentVideo = () => {
   useEffect(() => {
     if (activeAssignmentId) {
       fetchSubmissions(activeAssignmentId);
-      setShowAssignmentMessage(false); // Hide the message when an assignment is clicked
+      setShowAssignmentMessage(false);
     }
   }, [activeAssignmentId]);
 
@@ -120,7 +121,6 @@ const ListAssignmentVideo = () => {
         },
       };
 
-      // Fetch submissions for the selected assignment
       const submissionsResponse = await axios.get(`https://hmsnwu.azurewebsites.net/submissions?assignmentId=${assignmentId}`, config);
       if (Array.isArray(submissionsResponse.data)) {
         setSubmissions(submissionsResponse.data);
@@ -136,9 +136,8 @@ const ListAssignmentVideo = () => {
   };
 
   useEffect(() => {
-    // Fetch video details when submissions change
     const fetchVideoDetails = async () => {
-      const videoIds = [...new Set(submissions.map(submission => submission.VideoID))]; // Get unique VideoIDs
+      const videoIds = [...new Set(submissions.map(submission => submission.VideoID))];
       const token = localStorage.getItem('token');
       const config = {
         headers: {
@@ -148,7 +147,6 @@ const ListAssignmentVideo = () => {
       };
 
       try {
-        // Fetch details for each video by its VideoID
         const videoDetailPromises = videoIds.map(id =>
           axios.get(`https://hmsnwu.azurewebsites.net/videos/${id}`, config)
         );
@@ -158,8 +156,8 @@ const ListAssignmentVideo = () => {
         videoResponses.forEach(response => {
           if (response.data) {
             details[response.data.VideoID] = {
-              VideoTitle: response.data.VideoTitle, // Ensure VideoTitle is included
-              VideoURL: response.data.VideoURL, // Ensure VideoURL is included
+              VideoTitle: response.data.VideoTitle,
+              VideoURL: response.data.VideoURL,
             };
           }
         });
@@ -170,7 +168,7 @@ const ListAssignmentVideo = () => {
     };
 
     if (submissions.length > 0) {
-      fetchVideoDetails(); // Fetch video details when submissions are available
+      fetchVideoDetails();
     }
   }, [submissions]);
 
@@ -180,6 +178,34 @@ const ListAssignmentVideo = () => {
 
   const handleBackClick = () => {
     setActiveAssignmentId(null);
+  };
+
+  const handleSubmitFeedback = async (submissionId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const feedbackData = {
+        submissionId,
+        lectureId,
+        feedbackText,
+        mark,
+      };
+
+      // POST request to submit feedback
+      await axios.post('https://hmsnwu.azurewebsites.net/feedbacks', feedbackData, config);
+      alert('Feedback submitted successfully');
+      setFeedbackText('');
+      setMark('');
+    } catch (err) {
+      console.error('Error submitting feedback:', err);
+      setError(`Failed to submit feedback: ${err.response?.data?.error || err.message}`);
+    }
   };
 
   const filteredSubmissions = submissions.filter(
@@ -261,9 +287,11 @@ const ListAssignmentVideo = () => {
                     <thead>
                       <tr>
                         <th>Submission ID</th>
-                        <th>Assignment Title</th> {/* New column for Assignment Title */}
-                        <th>Video Title</th> {/* New column for Video Title */}
+                        <th>Assignment Title</th>
+                        <th>Video Title</th>
                         <th>Video URL</th>
+                        <th>Feedback</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -276,6 +304,25 @@ const ListAssignmentVideo = () => {
                             <a href={videoDetails[submission.VideoID]?.VideoURL || '#'} target="_blank" rel="noopener noreferrer">
                               {videoDetails[submission.VideoID]?.VideoURL || 'No URL available'}
                             </a>
+                          </td>
+                          <td>
+                            <input 
+                              type="text" 
+                              value={feedbackText} 
+                              onChange={(e) => setFeedbackText(e.target.value)} 
+                              placeholder="Feedback" 
+                            />
+                            <input 
+                              type="number" 
+                              value={mark} 
+                              onChange={(e) => setMark(e.target.value)} 
+                              placeholder="Mark" 
+                            />
+                          </td>
+                          <td>
+                            <button onClick={() => handleSubmitFeedback(submission.SubmissionID)}>
+                              Submit Feedback
+                            </button>
                           </td>
                         </tr>
                       ))}
